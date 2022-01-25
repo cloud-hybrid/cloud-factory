@@ -1,7 +1,5 @@
 # CI-CD, Continuous Integration #
 
-![CI-CD-Workflow](./documentation/assets/ci-cd-flow-desktop.png)
-
 ## Overview ##
 
 **CI/CD introduces ongoing automation and continuous monitoring** throughout the lifecycle of applications -- from
