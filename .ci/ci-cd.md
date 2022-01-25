@@ -18,4 +18,4 @@ merged, those changes are validated by automatically building the application an
 levels of automated testing, typically unit and integration tests, to ensure the changes haven’t broken the 
 app.
 
-![CI](./assets/ci.png)
+![CI](./documentation/assets/ci.png)
