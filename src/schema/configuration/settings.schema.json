@@ -1,0 +1,10 @@
+{
+    "Organization": "Organization",
+    "Environment": "Development",
+    "Service": "Proof-of-Concept",
+    "Cloud": {
+        "Provider": "AWS",
+        "Region": "us-east-2",
+        "Profile": "default"
+    }
+}

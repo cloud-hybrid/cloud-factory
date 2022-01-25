@@ -1,0 +1,1 @@
+- [ ] For all Stack Constructs (Application(s)), ensure to inherit a `module` property from `Locality`

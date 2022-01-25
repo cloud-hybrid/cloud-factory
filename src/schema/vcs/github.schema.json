@@ -1,0 +1,83 @@
+{
+    "$id": "settings.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Schema Definition for Settings Provider(s)",
+    "required": [
+        "CI",
+        "Environment",
+        "GitHub"
+    ],
+    "type": "object",
+    "properties": {
+        "CI": {
+            "default": false,
+            "$ref": "#/$defs/ci"
+        },
+        "Environment": {
+            "default": "Development",
+            "$ref": "#/$defs/environment"
+        },
+        "GitHub": {
+            "$ref": "#/$defs/github"
+        }
+    },
+    "$defs": {
+        "secret": {
+            "type": "string",
+            "description": "Private Environment Variable Intended not to be Leaked into a VCS or Any Public Context(s)"
+        },
+        "secret-object": {
+            "type": "object",
+            "description": "Private JSON Configuration Intended not to be Leaked into a VCS or Any Public Context(s)"
+        },
+        "ci": {
+            "type": "boolean",
+            "description": "Node.js Runtime Dependency Environment Variable"
+        },
+        "environment": {
+            "type": "string",
+            "enum": [
+                "Development",
+                "QA",
+                "Staging",
+                "UAT",
+                "Production"
+            ],
+            "description": "Optional Deployment Context, Common-Name"
+        },
+        "github": {
+            "$ref": "#/$defs/secret-object",
+            "title": "Configuration Object",
+            "description": "Schema Implementation for API Application",
+            "properties": {
+                "API": {
+                    "type": "string",
+                    "const": "https://api.github.com/",
+                    "default": "https://api.github.com/",
+                    "description": "Public API (REST) Endpoint"
+                },
+                "User": {
+                    "title": "API-Capable Account Username",
+                    "default": "********",
+                    "$ref": "#/$defs/secret"
+                },
+                "Token": {
+                    "title": "Personal Access Token",
+                    "default": "****************",
+                    "$ref": "#/$defs/secret"
+                },
+                "Organization": {
+                    "title": "Organization Account Name",
+                    "default": "cloud-technology",
+                    "$ref": "#/$defs/secret"
+                }
+            },
+            "required": [
+                "API",
+                "User",
+                "Token",
+                "Organization"
+            ]
+        }
+    }
+}

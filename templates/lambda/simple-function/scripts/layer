@@ -1,0 +1,14 @@
+#!/bin/bash --norc
+
+set -eo pipefail
+
+mkdir -p layer/nodejs
+
+rm -r -f node_modules
+rm -r -f layer/nodejs/node_modules
+
+npm install 2>/dev/null
+
+mv node_modules layer/nodejs/node_modules
+
+exit ${?}

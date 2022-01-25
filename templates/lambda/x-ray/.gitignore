@@ -1,0 +1,12 @@
+.DS_Store
+
+layer
+
+node_modules
+
+bucket-name.artifact
+bucket-name.artifact.json
+
+response.json
+
+template.output.yaml

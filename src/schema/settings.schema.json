@@ -1,0 +1,10 @@
+{
+    "Organization": "string",
+    "Environment": "string",
+    "Service": "string",
+    "Cloud": {
+        "Provider": "string",
+        "Region": "string",
+        "Profile": "string"
+    }
+}

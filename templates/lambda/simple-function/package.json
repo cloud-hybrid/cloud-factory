@@ -1,0 +1,27 @@
+{
+    "name": "simple-function",
+    "private": true,
+    "version": "1.0.0",
+    "type": "commonjs",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node -r ./configuration src/index.js"
+    },
+    "scrips": {
+        "install": "chmod a+x scripts/*",
+        "layer": "exec scripts/layer",
+        "build": "exec scripts/build",
+        "deploy": "exec scripts/deploy",
+        "local": "exec scripts/local",
+        "delete": "exec scripts/delete"
+    },
+    "dependencies": {
+        "dotenv": "^11.0.0"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.90",
+        "@types/jsonwebtoken": "^8.5.8",
+        "@types/node": "^17.0.10",
+        "aws-sdk": "^2.1059.0"
+    }
+}

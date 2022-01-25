@@ -1,0 +1,19 @@
+{
+    "language": "typescript",
+    "app": "node src/constructs/index.js",
+    "terraformProviders": [
+        "hashicorp/aws@~>3.0",
+        "hashicorp/archive@~>2.2.0",
+        "hashicorp/external@~>2.1.1",
+        "hashicorp/time@~>0.7.2",
+        "hashicorp/local@~>2.1.0",
+        "hashicorp/random@~>3.1.0",
+        "hashicorp/null@~>3.1.0"
+    ],
+    "terraformModules": [],
+    "context": {
+        "excludeStackIdFromLogicalIds": "true",
+        "allowSepCharsInLogicalIds": "true"
+    },
+    "projectId": "ce76be0a-f22e-486a-9f17-d6258fba8151"
+}

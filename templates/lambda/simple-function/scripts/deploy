@@ -1,0 +1,27 @@
+#!/bin/bash --norc
+
+set -eo pipefail
+
+mkdir -p layer/nodejs
+
+rm -r -f node_modules
+rm -r -f layer/nodejs/node_modules
+
+npm install 2>/dev/null
+
+mv node_modules layer/nodejs/node_modules
+
+sam build --debug --config-file samconfig.toml \
+    --template-file configuration/template.yaml
+
+sam package --debug \
+    --output-template-file configuration/template.stack.yaml \
+    --template-file configuration/template.yaml \
+        --config-file samconfig.toml \
+            --s3-prefix capstone-sam-local-deployments \
+                --resolve-s3
+
+sam deploy --template-file configuration/template.stack.yaml --config-file samconfig.toml \
+    || sam deploy --template-file configuration/template.stack.yaml --config-file samconfig.toml --guided
+
+exit ${?}

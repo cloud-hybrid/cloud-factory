@@ -1,0 +1,53 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09T00:00:00.000Z",
+    "Description": "{{% Description %}}",
+    "Transform": [
+        "AWS::Serverless-2016-10-31"
+    ],
+    "Parameters": {
+        "Hostname": {
+            "Description": "...",
+            "Type": "String",
+            "Default": "localhost"
+        },
+        "Username": {
+            "Description": "...",
+            "Type": "String",
+            "Default": "Development"
+        },
+        "Password": {
+            "Default": "Local",
+            "Description": "...",
+            "Type": "String",
+            "MinLength": 8,
+            "MaxLength": 64,
+            "ConstraintDescription": "{{% Password-Constraint %}}"
+        }
+    },
+    "Resources": {
+        "Function": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Handler": "index.handler",
+                "CodeUri": ".",
+                "Runtime": "nodejs14.x",
+                "Architectures": [
+                    "x86_64"
+                ],
+                "MemorySize": 128,
+                "Timeout": 100,
+                "Description": "A Lambda Function",
+                "Policies": [
+                    "AWSLambdaBasicExecutionRole"
+                ],
+                "Environment": {
+                    "Variables": {
+                        "HOST": null,
+                        "USERNAME": null,
+                        "PASSWORD": null
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+version: 0.0
+
+phases:
+    install:
+        commands:
+            - npm run install
+            - npm run layer
+            - npm run build
+    pre_build:
+        commands:
+            - npm prune --production
+    build:
+        commands:
+            - npm run package
+artifacts:
+    type: zip
+    files:
+        - template-export.yml

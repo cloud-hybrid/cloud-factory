@@ -1,0 +1,16 @@
+- [ ] Break out into its own repository
+- [ ] Describe Motivation
+    - [ ] `chalk` is deprecating `underline`
+        - [ ] Ensure to discuss how the use of `ANSI("[Color]", "[Content]")` doesn't break, massively accross
+          code-bases vs how `Chalk.red("[Content]")` does
+            - [ ] Implement a simple conditional check for `this[color]` to ensure claim holds true
+    - [ ] `ansi` is out of date
+    - [ ] `ansi-colors` doesn't implement typescript, or modules
+    - [ ] Current color packages seem rather convuluded or difficult to maintain
+    - [ ] Type-Hinting
+        - [ ] Include IDE examples (images)
+        - [ ] Provide example of a TypeScript Yargs CLI package
+            - [ ] Create
+        - [ ] Provide example of a TypeScript Commander CLI package
+            - [ ] Create
+- [ ] Implement TTY check (output + color capable)

@@ -1,0 +1,121 @@
+{
+    "name": "cloud-factory",
+    "private": false,
+    "version": "0.4.68",
+    "type": "module",
+    "main": "index.js",
+    "description": "A CLI Utility to Manage Software-Defined State",
+    "types": "distribution",
+    "repository": "git+https://github.com/cloud-hybrid/factory.git",
+    "license": "BSD-2-Clause",
+    "author": "Jacob B. Sanders",
+    "scripts": {
+        "test-env": "node test.js",
+        "start": "node index.js",
+        "build": "tsc --pretty",
+        "watch": "tsc --watch",
+        "test": "jest",
+        "test-watch": "jest --watch",
+        "upload": "npm publish --access public",
+        "reinstall": "npm update && npm install --global --force",
+        "prepublishOnly": "npm install",
+        "constructs": "cdktf get --language typescript",
+        "upgrade": "npm i cdktf@latest cdktf-cli@latest",
+        "upgrade-next": "npm i cdktf@next cdktf-cli@next"
+    },
+    "dependencies": {
+        "@aws-cdk/aws-apigateway": "^1.139.0",
+        "@aws-cdk/aws-iam": "^1.139.0",
+        "@aws-cdk/aws-lambda": "^1.139.0",
+        "@aws-cdk/aws-logs": "^1.139.0",
+        "@aws-cdk/cfnspec": "^2.7.0",
+        "@aws-cdk/core": "^1.139.0",
+        "@aws-cdk/region-info": "^2.7.0",
+        "@aws-sdk/client-s3": "^3.45.0",
+        "@aws-sdk/client-secrets-manager": "^3.46.0",
+        "@aws-sdk/credential-providers": "^3.46.0",
+        "@cdktf/aws-cdk": "^0.2.21",
+        "@cdktf/provider-archive": "^0.2.149",
+        "@cdktf/provider-aws": "^4.0.4",
+        "@cdktf/provider-generator": "^0.8.6",
+        "@cloud-technology/parameter": "^0.4.118",
+        "ajv": "^8.8.2",
+        "ajv-formats": "^2.1.1",
+        "aws-cdk-lib": "^2.8.0",
+        "cdktf": "^0.8.6",
+        "cdktf-cli": "^0.8.6",
+        "chalk": "^5.0.0",
+        "constructs": "^10.0.31",
+        "dotenv": "^14.2.0",
+        "jsonschema": "^1.4.0",
+        "uuid": "^8.3.2",
+        "yargs": "^17.3.0"
+    },
+    "devDependencies": {
+        "@aws-cdk/assert": "latest",
+        "@aws-sdk/types": "latest",
+        "@jest/globals": "^27.4.6",
+        "@types/aws-lambda": "latest",
+        "@types/bcryptjs": "latest",
+        "@types/events": "latest",
+        "@types/jest": "^27.4.0",
+        "@types/json-schema": "latest",
+        "@types/mime": "latest",
+        "@types/mime-types": "latest",
+        "@types/node": "latest",
+        "@types/uuid": "latest",
+        "@types/yargs": "latest",
+        "@typescript-eslint/eslint-plugin": "latest",
+        "@typescript-eslint/experimental-utils": "latest",
+        "@typescript-eslint/parser": "latest",
+        "@typescript-eslint/scope-manager": "latest",
+        "@typescript-eslint/type-utils": "latest",
+        "@typescript-eslint/typescript-estree": "latest",
+        "bcryptjs": "^2.4.3",
+        "eslint": "latest",
+        "jest": "^27.4.7",
+        "ts-jest": "latest",
+        "ts-node": "latest",
+        "tslib": "latest",
+        "typescript": "latest",
+        "typescript-eslint-language-service": "latest"
+    },
+    "exports": {
+        ".": "./index.js"
+    },
+    "eslintConfig": {
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/eslint-recommended",
+            "plugin:@typescript-eslint/recommended"
+        ],
+        "rules": {
+            "no-case-declarations": 0,
+            "@typescript-eslint/no-explicit-any": 0,
+            "@typescript-eslint/explicit-function-return-type": 0,
+            "@typescript-eslint/no-use-before-define": 0,
+            "@typescript-eslint/no-empty-interface": 0,
+            "@typescript-eslint/explicit-module-boundary-types": 0,
+            "@typescript-eslint/no-empty-function": 0,
+            "@typescript-eslint/no-unused-vars": 0,
+            "@typescript-eslint/no-inferrable-types": 0,
+            "@typescript-eslint/ban-types": 0,
+            "@typescript-eslint/ban-ts-comment": 0,
+            "no-sequences": "error"
+        },
+        "ignorePatterns": [
+            "ci",
+            "dist",
+            "coverage",
+            "distribution",
+            "node_modules"
+        ]
+    },
+    "bin": {
+        "cloud-factory": "./index.js"
+    }
+}

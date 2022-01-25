@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Transform: "AWS::Serverless-2016-10-31"
+
+Description: -<
+    An AWS Lambda Function
+
+Parameters:
+    Alias:
+        Type: String
+        Description: "Lambda Function Name"
+        Default: "AWS-Development-Lambda-Function"
+
+Resources:
+    Function:
+        Type: AWS::Serverless::Function
+        Properties:
+            FunctionName: !Ref Alias
+            Handler: index.handler
+            Runtime: nodejs14.x
+            CodeUri: ..
+            Description: Call the AWS Lambda API
+            Timeout: 10
+            Policies:
+                - AWSLambdaBasicExecutionRole
+                - AWSLambda_ReadOnlyAccess
+                - AWSXrayWriteOnlyAccess
+            Tracing: Active
+            Layers:
+                - !Ref Dependencies
+            Events:
+                API:
+                    Type: HttpApi
+
+    Dependencies:
+        Type: AWS::Serverless::LayerVersion
+        Properties:
+            LayerName: Function-Layer
+            Description: Dependencies for Lambda Function
+            ContentUri: ./../layer
+            CompatibleRuntimes:
+                - nodejs14.x

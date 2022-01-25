@@ -1,0 +1,22 @@
+{
+    "name": "lambda-x-ray",
+    "version": "0.0.1",
+    "private": true,
+    "devDependencies": {
+        "aws-sdk": "latest",
+        "jest": "latest"
+    },
+    "dependencies": {
+        "aws-xray-sdk-core": "latest"
+    },
+    "scripts": {
+        "test": "jest",
+        "configure": "exec ./configure",
+        "deploy": "exec ./deploy",
+        "s3-bucket": "exec ./s3-bucket",
+        "delete-s3-bucket": "exec ./delete-s3-bucket",
+        "build-layer": "exec ./build-layer",
+        "invoke": "exec ./invoke",
+        "clean": "exec ./clean"
+    }
+}
