@@ -1,6 +1,6 @@
 # CI-CD, Continuous Integration #
 
-![CI-CD-Workflow](./assets/ci-cd-flow-desktop.png)
+![CI-CD-Workflow](./documentation/assets/ci-cd-flow-desktop.png)
 
 ## Overview ##
 
