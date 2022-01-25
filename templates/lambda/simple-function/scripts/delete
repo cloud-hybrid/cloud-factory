@@ -1,9 +1,0 @@
-#!/bin/bash --norc
-
-set -eo pipefail
-
-sam delete --debug --config-file configuration/samconfig.toml
-
-[[ "${?}" == "0" ]] && rm -f .stack || true
-
-exit ${?}
