@@ -1,0 +1,92 @@
+{
+    "$id": "lambda.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "Meta-schema Lambda Constructors or Providers",
+    "description": "Schema Definition for Schema-CLI Provider(s)",
+    "type": "object",
+    "required": [
+        "name",
+        "description",
+        "uri"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "name": {
+            "description": "Lambda Function Common-Name",
+            "type": "string"
+        },
+        "description": {
+            "type": "string",
+            "description": "A description of the function"
+        },
+        "uri": {
+            "type": "string",
+            "description": "Path to the function's deployment package within the local filesystem",
+            "format": "uri-reference"
+        },
+        "runtime": {
+            "type": "string",
+            "description": "Program Runtime Environment. Defaults and is Enforced to Latest LTS",
+            "enum": [
+                "node14.x",
+                "node12.x"
+            ],
+            "default": "node14.x"
+        },
+        "handler": {
+            "type": "string",
+            "description": "Function entrypoint. Lambda Handler's are strictly set to ensure of consistent architecture(s) & deployable(s)",
+            "enum": [
+                "index.handler"
+            ],
+            "default": "index.handler"
+        },
+        "type": {
+            "type": "string",
+            "description": "Function Packaging Type. Defaults and is enforced to Zip",
+            "enum": [
+                "Zip"
+            ],
+            "default": "Zip"
+        },
+        "memory": {
+            "description": "Lambda runtime memory allocation. Defaults to 128MB",
+            "default": 128
+        },
+        "timeout": {
+            "description": "Function timeout. Defaults to 10 seconds",
+            "default": 10
+        },
+        "environment": {
+            "type": "object",
+            "description": "Environment variables that are accessible from function code during execution",
+            "additionalProperties": {
+                "type": "string"
+            },
+            "patternProperties": {
+                "[a-zA-Z][a-zA-Z0-9_]+": {
+                    "type": "string"
+                }
+            },
+            "default": {}
+        },
+        "tags": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        }
+    },
+    "definitions": {
+        "unique": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+                "type": "string"
+            }
+        }
+    }
+}

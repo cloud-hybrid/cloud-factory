@@ -20,7 +20,8 @@ const Main = async () => {
             cwd: async (input: Argv) => (await import("../commands/environment/cwd.js")).CWD( input ),
             environment: async (input: Argv) => (await import("../commands/environment/configuration.js")).Configuration(
                 input ),
-            input: async (input: Argv) => (await import("../commands/test-input.js")).Input( input ),
+            input: async (input: Argv) => (await import("../commands/prompt")).JSON( input ),
+            git: async (input: Argv) => (await import("../commands/git-template")).Git(input),
             version: (await import("../commands/version.js")).Version,
             factory: {
                 deploy: async (input: Argv) => await Factory.Deploy( input ),
@@ -149,10 +150,16 @@ const Main = async () => {
                     );
                 }) )
 
-            /*** Test-Input */
-            .command( "test-input", Colors( "Red", "Arbitrary User-Input (Testing Purposes Only)" ), (
+            /*** JSON-Input */
+            .command( "json-input", Colors( "Red", "JSON User-Input" ), (
                 async ($: Argv) => {
                     return await Commands.input( $ );
+                }) )
+
+            /*** Test-Input */
+            .command( "git", Colors( "Red", "Git Templating" ), (
+                async ($: Argv) => {
+                    return await Commands.git( $ );
                 }) )
 
             /*** CDFK Configuration */

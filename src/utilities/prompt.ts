@@ -1,8 +1,4 @@
 /***
- * @name        cli-prompt
- * @package     @cloud-vault
- * @summary     ESM-based CLI Prompt
- *
  * @author      Jacob B. Sanders
  * @license     BSD 3-Clause License
  * @copyright   Cloud-Technology LLC. & Affiliates
@@ -12,7 +8,7 @@ import Process from "process";
 import Input from "readline";
 import Utility from "util";
 
-/***
+/**
  * Asynchronous CLI Prompt
  *
  * @param query
@@ -22,20 +18,14 @@ import Utility from "util";
  * @constructor
  *
  * @example
+ * import { Prompt } from ...;
  *
- * const Command = async ($: Argv) => {
- *     Configuration( $ );
- *     $.check( async ($) => {
- *         ( $?.debug ) && ( TTY ) && console.log( Input( $._ ), JSON.stringify( $, null, 4 ), "\n" );
+ * const Awaitable = async (title: string) => {
+ *     const Input = async () => await Prompt( title + ":" + " " );
  *
- *         const Continue = async () => await Prompt( "Continue? (Y/N)" + ":" + " " );
- *
- *         let trigger: string = await Continue().then( ($) => $.toUpperCase() );
- *
- *         while ( trigger !== "Y" && trigger !== "N" ) trigger = await Continue().then( ($) => $.toUpperCase() );
- *
- *         return true;
- *     } ).strict();
+ *     let $: string = await Input().then( (output) => output );
+ *     while ( $.trim().length === 0 ) $ = await Input().then( ($) => $ );
+ *     return $.trim();
  * };
  *
  */
