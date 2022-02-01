@@ -53,7 +53,7 @@
         "@types/bcryptjs": "latest",
         "@types/events": "latest",
         "@types/inquirer": "latest",
-        "@types/jest": "^27.4.0",
+        "@types/jest": "latest",
         "@types/json-schema": "latest",
         "@types/node": "latest",
         "@types/uuid": "latest",
