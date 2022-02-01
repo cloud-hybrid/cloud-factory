@@ -7,7 +7,24 @@
  * @copyright   Cloud-Technology LLC. & Affiliates
  */
 
-import AWS, { iam as IAM } from "@cdktf/provider-aws";
+import { S3Bucket } from "@internal/aws/s3/s3-bucket.js";
+import { S3BucketObject } from "@internal/aws/s3/s3-bucket-object.js";
+import { Apigatewayv2Api } from "@internal/aws/apigatewayv2/apigatewayv2-api.js";
+import { Apigatewayv2Stage } from "@internal/aws/apigatewayv2/apigatewayv2-stage.js";
+import { Apigatewayv2Integration } from "@internal/aws/apigatewayv2/apigatewayv2-integration.js";
+import { Apigatewayv2Route } from "@internal/aws/apigatewayv2/apigatewayv2-route.js";
+import { CloudwatchLogStream} from "@internal/aws/cloudwatch/cloudwatch-log-stream.js"
+import { CloudwatchLogGroup } from "@internal/aws/cloudwatch/cloudwatch-log-group.js";
+import { IamPolicy } from "@internal/aws/iam/iam-policy.js";
+import { IamRolePolicyAttachment } from "@internal/aws/iam/iam-role-policy-attachment.js";
+import { IamRole } from "@internal/aws/iam/iam-role.js";
+
+import { LambdaFunction } from "@internal/aws/lambdafunction/lambda-function.js";
+import { LambdaPermission } from "@internal/aws/lambdafunction/lambda-permission.js";
+import { LambdaLayerVersion } from "@internal/aws/lambdafunction/lambda-layer-version.js";
+
+import { AwsProvider } from "@internal/aws/aws-provider.js";
+
 import Assertion from "assert";
 
 import { App, AssetType, TerraformAsset, TerraformOutput, TerraformStack } from "cdktf";
@@ -30,13 +47,13 @@ interface Distributable {
     environment?: string;
 }
 
-const Factory: Distributable = await import(Path.join(Process.cwd(), "./factory.json")).catch(() => {
+const Factory: Distributable = await import(Path.join( Process.cwd(), "./factory.json" )).catch( () => {
     return {
         name: "Factory",
         organization: "Cloud-Technology",
         environment: "Development"
     };
-});
+} );
 
 const Dot = await import("dotenv");
 
@@ -62,13 +79,10 @@ class Configuration {
 
     static service: string = "Service";
 
-
     constructor(settings?: Distributable) {
         this.settings = (settings) ? settings : null;
     }
 }
-
-type Policy = IAM.IamPolicy;
 
 // @ts-ignore
 
@@ -86,11 +100,11 @@ type Policy = IAM.IamPolicy;
 
 function normalize(prefix: string, name: string) {
     return [ prefix, name.split( " " ).map( ($) => {
-        return $.toString()[ 0 ].toUpperCase() + $.toString().slice( 1 );
+        return $.toString()[0].toUpperCase() + $.toString().slice( 1 );
     } ).join( "-" ).split( "_" ).map( ($) => {
-        return $.toString()[ 0 ].toUpperCase() + $.toString().slice( 1 );
+        return $.toString()[0].toUpperCase() + $.toString().slice( 1 );
     } ).join( "-" ).split( "-" ).map( ($) => {
-        return $.toString()[ 0 ].toUpperCase() + $.toString().slice( 1 );
+        return $.toString()[0].toUpperCase() + $.toString().slice( 1 );
     } ).join( "-" ) ].join( "-" );
 }
 
@@ -120,7 +134,7 @@ class Lambda {
 
     public readonly source: string;
 
-    public readonly policy: Policy | JSON | string = JSON.stringify( {
+    public readonly policy: IamPolicy | JSON | string = JSON.stringify( {
         Version: "2012-10-17", Statement: [ {
             Action: "sts:AssumeRole", Principal: {
                 Service: "lambda.amazonaws.com"
@@ -204,7 +218,7 @@ class SAM {
     public readonly layers: string[] = [];
 
     /*** AWS Cloud Provider, Derived from Configuration (Settings) File */
-    public readonly cloud: Providers = "AWS"
+    public readonly cloud: Providers = "AWS";
 
     /*** @todo Update Documentation  */
     public readonly region: string = Configuration.region;
@@ -233,12 +247,12 @@ class SAM {
         /// Assertion to ensure a distribution target exists
         Assertion.strictEqual( FS.existsSync( this.distribution ), true, "A CDK Distribution Target Doesn't Exist" );
         FS.readdirSync( this.distribution ).forEach( ($) => {
-            ( $ !== "library" ) && this.functions.push( Path.join( this.distribution, $ ) );
+            ($ !== "library") && this.functions.push( Path.join( this.distribution, $ ) );
         } );
 
-        FS.readdirSync( Path.join(this.distribution, "library" )).forEach( ($) => {
-            this.layers.push(Path.join(this.distribution, "library", $));
-        });
+        FS.readdirSync( Path.join( this.distribution, "library" ) ).forEach( ($) => {
+            this.layers.push( Path.join( this.distribution, "library", $ ) );
+        } );
     }
 
     /***
@@ -253,7 +267,7 @@ class SAM {
      *      - {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging.html|Logging}
      *           - {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging-variables.html|Variables}
      *
-     * @param stream {AWS.cloudwatch.CloudwatchLogStream}
+     * @param stream {CloudwatchLogStream}
      *
      * @param format
      * @returns {{
@@ -263,9 +277,9 @@ class SAM {
      *
      */
 
-    public static generateAPIGatewayCloudWatchAccessLog(stream: AWS.cloudwatch.CloudwatchLogStream | null = null,
+    public static generateAPIGatewayCloudWatchAccessLog(stream: CloudwatchLogStream | null = null,
         format: string | null = null) {
-        return ( stream === null || format === null ) ? null : {
+        return (stream === null || format === null) ? null : {
             destinationArn: String( stream.name ), format: String( format )
         };
     }
@@ -348,31 +362,31 @@ class Service extends TerraformStack {
         this.identifier = settings.name;
 
         /*** Cloud Provider (AWS) */
-        const provider = new AWS.AwsProvider( this, [ this.identifier, "AWS-Provider" ].join( "-" ).toLowerCase(), {
+        const provider = new AwsProvider( this, [ this.identifier, "AWS-Provider" ].join( "-" ).toLowerCase(), {
             region: settings.region
         } );
 
         /*** Unique S3 Bucket Containing Lambda Artifact(s) */
-        const bucket = new AWS.s3.S3Bucket( this, [ this.identifier, "S3-Bucket" ].join( "-" ).toLowerCase(), {
+        const bucket = new S3Bucket( this, [ this.identifier, "S3-Bucket" ].join( "-" ).toLowerCase(), {
             bucket: settings.bucket
         } );
 
         /*** Logging Group */
-        const group = new AWS.cloudwatch.CloudwatchLogGroup( this,
+        const group = new CloudwatchLogGroup( this,
             [ this.identifier, "Log-Group" ].join( "-" ).toLowerCase(),
             {
                 name: [ this.identifier, "Log-Group" ].join( "-" )
             } );
 
         /*** Logging Stream(s) */
-        const stream = new AWS.cloudwatch.CloudwatchLogStream( this,
+        const stream = new CloudwatchLogStream( this,
             [ this.identifier, "Log-Stream" ].join( "-" ).toLowerCase(),
             {
                 name: [ this.identifier, "Log-Stream" ].join( "-" ), logGroupName: group.name
             } );
 
         /*** API Gateway */
-        const api = new AWS.apigatewayv2.Apigatewayv2Api( this,
+        const api = new Apigatewayv2Api( this,
             [ this.identifier, "Gateway" ].join( "-" ).toLowerCase(),
             {
                 name: [ this.identifier, settings.gateway ].join( "-" ),
@@ -381,7 +395,7 @@ class Service extends TerraformStack {
             } );
 
         /*** API Gateway-V2 Stage Configuration */
-        const stage = new AWS.apigatewayv2.Apigatewayv2Stage( this,
+        const stage = new Apigatewayv2Stage( this,
             [ this.identifier, "Environment-Stage" ].join( "-" ).toLowerCase(),
             {
                 apiId: api.id,
@@ -419,14 +433,14 @@ class Service extends TerraformStack {
                 /// console.debug("[Debug] Target S3 Folder-Key" + ":", [ID, "Archive", [Function.version, "zip"].join(".")].join("-"));
 
                 /*** Upload Lambda Artifact(s) --> S3 */
-                const archive = new AWS.s3.S3BucketObject( this, [ ID, "Archive" ].join( "-" ).toLowerCase(), {
+                const archive = new S3BucketObject( this, [ ID, "Archive" ].join( "-" ).toLowerCase(), {
                     source: asset.path,
                     bucket: bucket.bucket,
                     key: [ ID, "Archive", [ Function.version, "zip" ].join( "." ) ].join( "-" )
                 } );
 
                 /*** Lambda Execution Role */
-                const role = new AWS.iam.IamRole( this, [ ID, "Execution-Role" ].join( "-" ).toLowerCase(), {
+                const role = new IamRole( this, [ ID, "Execution-Role" ].join( "-" ).toLowerCase(), {
                     name: [ ID, "Execution-Role" ].join( "-" ),
                     description: "Lambda Execution Role",
                     assumeRolePolicy: String( Function.policy ),
@@ -446,7 +460,7 @@ class Service extends TerraformStack {
                         } );
 
                         /*** Upload Lambda Artifact(s) --> S3 */
-                        const archive = new AWS.s3.S3BucketObject( this,
+                        const archive = new S3BucketObject( this,
                             [ Name, "Layer-Archive" ].join( "-" ).toLowerCase(),
                             {
                                 source: asset.path,
@@ -455,7 +469,7 @@ class Service extends TerraformStack {
                             } );
 
                         /*** Upload Lambda-Layer Artifact(s) --> S3 */
-                        const layer = new AWS.lambdafunction.LambdaLayerVersion( this,
+                        const layer = new LambdaLayerVersion( this,
                             [ Name, "Layer" ].join( "-" ).toLowerCase(),
                             {
                                 layerName: Name, description: "...", s3Bucket: bucket.bucket, s3Key: archive.key
@@ -466,7 +480,7 @@ class Service extends TerraformStack {
                 } );
 
                 /*** Lambda Function */
-                const lambda = new AWS.lambdafunction.LambdaFunction( this, ID.toLowerCase(), {
+                const lambda = new LambdaFunction( this, ID.toLowerCase(), {
                     functionName: [ ID, "Lambda" ].join( "-" ),
                     handler: Function.handler,
                     runtime: Function.runtime,
@@ -480,7 +494,7 @@ class Service extends TerraformStack {
                 } );
 
                 /*** Inline API Gateway ==> Lambda Invocation */
-                const invocation = new AWS.lambdafunction.LambdaPermission( this,
+                const invocation = new LambdaPermission( this,
                     [ ID, "Gateway-Invoke-Permission" ].join( "-" ).toLowerCase(),
                     {
                         functionName: lambda.functionName,
@@ -490,7 +504,7 @@ class Service extends TerraformStack {
                     } );
 
                 /*** Managed Policy Permitting Lambda Write Access to CloudWatch */
-                const policy = new AWS.iam.IamRolePolicyAttachment( this,
+                const policy = new IamRolePolicyAttachment( this,
                     [ ID, "Execution-Role-Managed-Policy" ].join( "-" ).toLowerCase(),
                     {
                         policyArn: Lambda.Attachment, role: role.name
@@ -523,7 +537,7 @@ class Service extends TerraformStack {
                  * - passthroughBehavior: "WHEN_NO_MATCH" (Websocket APIs Only)
                  */
 
-                const integration = new AWS.apigatewayv2.Apigatewayv2Integration( this,
+                const integration = new Apigatewayv2Integration( this,
                     [ ID, "Gateway-Integration" ].join( "-" ).toLowerCase(),
                     {
                         apiId: api.id,
@@ -534,7 +548,7 @@ class Service extends TerraformStack {
                         integrationUri: lambda.arn
                     } );
 
-                const route = new AWS.apigatewayv2.Apigatewayv2Route( this,
+                const route = new Apigatewayv2Route( this,
                     [ ID, "Gateway-Route" ].join( "-" ).toLowerCase(),
                     {
                         apiId: api.id,
@@ -553,7 +567,7 @@ class Service extends TerraformStack {
 }
 
 const Deployment = () => {
-    console.debug("...")
+    console.debug( "..." );
     const Application = new App( {
         skipValidation: false, stackTraces: true
     } );
@@ -574,14 +588,14 @@ const Deployment = () => {
 };
 
 const Metadata = {
-    Package: Object.create(null)
+    Package: Object.create( null )
 };
 
-try { Metadata.Package = (
-    await import("./../library/types/module.js")
-).Locality.initialize( import.meta.url ); }
-
-catch (e) { Metadata.Package = await Deployment(); }
+try {
+    Metadata.Package = (
+        await import("./../library/types/module.js")
+    ).Locality.initialize( import.meta.url );
+} catch ( e ) { Metadata.Package = await Deployment(); }
 
 export { Metadata };
 

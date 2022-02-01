@@ -11,6 +11,12 @@ In order to begin, open a `node.js` capable console and then run the following c
 
 ---
 
+## Schemas ##
+
+- https://raw.githubusercontent.com/awslabs/goformation/master/schema/sam.schema.json
+- https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json
+- https://raw.githubusercontent.com/awslabs/goformation/master/schema/cdk.schema.json
+
 ## Usage ##
 
 There exists a few different ways to run `cloud-factory`, depending on the context.

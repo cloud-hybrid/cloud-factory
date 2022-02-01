@@ -1,15 +1,15 @@
 {
     "compilerOptions": {
+        "checkJs": true,
         "allowJs": true,
         "alwaysStrict": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "emitBOM": true,
+        "emitBOM": false,
         "incremental": true,
+        "sourceMap": true,
         "inlineSourceMap": false,
         "noEmitOnError": true,
-        "listEmittedFiles": true,
-        "listFilesOnly": false,
         "noFallthroughCasesInSwitch": true,
         "declaration": true,
         "emitDeclarationOnly": false,
@@ -19,17 +19,12 @@
         "noUnusedLocals": false,
         "noUnusedParameters": true,
         "resolveJsonModule": true,
-        "declarationMap": false,
+        "declarationMap": true,
         "strictFunctionTypes": true,
-        "baseUrl": ".",
-        "outDir": "distribution",
-        "declarationDir": "declarations",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "exactOptionalPropertyTypes": true,
-        "preserveWatchOutput": false,
+        "exactOptionalPropertyTypes": false,
         "forceConsistentCasingInFileNames": true,
-        "assumeChangesOnlyAffectDirectDependencies": false,
         "lib": [
             "ES2018",
             "ES2019",
@@ -45,23 +40,17 @@
         "removeComments": false,
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES2018",
+        "target": "ESNext",
         "composite": true,
         "diagnostics": true,
-        "importHelpers": false,
-        "noEmitHelpers": true,
+        "importHelpers": true,
         "isolatedModules": true,
         "disableSizeLimit": true,
         "extendedDiagnostics": true,
-        "downlevelIteration": true,
+        "downlevelIteration": false,
         "useDefineForClassFields": true,
-        "noErrorTruncation": true,
-        "checkJs": true,
-        "preserveSymlinks": true,
         "allowUnreachableCode": true,
-        "strictBindCallApply": true,
         "strictNullChecks": true,
-        "traceResolution": false,
         "plugins": [
             {
                 "name": "typescript-eslint-language-service"
@@ -69,18 +58,14 @@
         ]
     },
     "exclude": [
+        "**/*.map",
         "**/*.d.ts",
-        "testing",
-        "templates",
-        "unit-testing",
-        "development",
-        "distribution",
-        "declarations"
+        "**/*.js"
     ],
     "include": [
-        "cdktf.json",
-        ".constructs",
+        "@types",
+        "**/*.json",
         "**/*.ts",
-        "**/*.json"
+        "index.js"
     ]
 }

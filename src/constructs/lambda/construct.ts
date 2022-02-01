@@ -13,14 +13,15 @@ import { Construct as Constructor } from "constructs";
 import FS from "fs";
 import Module from "module";
 import Path from "path";
-import Provider from "../provider.js";
 
 import TF from "../stack.js";
 
 import Lambda from "./function.js";
 
 import IAM from "./iam.js";
-import { AWS } from "./provider";
+
+import * as AWS from "@internal/aws";
+
 
 /*** ESM Resolver for *Current-Working-Directory* */
 const CWD: string = Path.dirname( import.meta.url.replace( "file" + ":" + "//", "" ) );
@@ -106,8 +107,6 @@ Assertion.strictEqual( FS.existsSync( Packages ), true );
  *
  */
 
-type API = Provider.apigatewayv2.Apigatewayv2Api;
-
 class Construct extends Lambda {
     name: string;
 
@@ -115,9 +114,9 @@ class Construct extends Lambda {
 
     uri: string;
 
-    api?: API;
+    api: AWS.apigatewayv2.Apigatewayv2Api;
 
-    constructor(scope: Constructor, id: string, name: string, description: string, uri: string, gateway: API) {
+    constructor(scope: Constructor, id: string, name: string, description: string, uri: string, gateway: AWS.apigatewayv2.Apigatewayv2Api) {
         super( scope, id, name, description, uri );
 
         this.name = name;
@@ -132,7 +131,7 @@ class Construct extends Lambda {
         } );
 
         /*** AWS S3 Artifact */
-        const bucket = new Provider.s3.S3Bucket( this, [ this.name, "Bucket" ].join( "-" ).toLowerCase(), {
+        const bucket = new AWS.s3.S3Bucket( this, [ this.name, "Bucket" ].join( "-" ).toLowerCase(), {
             bucket: [ this.name, "Artifact-Storage" ].join( "-" ).toLowerCase(),
             versioning: { enabled: true, mfaDelete: false },
             forceDestroy: true,
@@ -149,7 +148,7 @@ class Construct extends Lambda {
         } );
 
         /*** Upload Lambda Artifact(s) --> S3 */
-        const archive = new Provider.s3.S3BucketObject( this, [ this.name, "Archive" ].join( "-" ).toLowerCase(), {
+        const archive = new AWS.s3.S3BucketObject( this, [ this.name, "Archive" ].join( "-" ).toLowerCase(), {
             source: asset.path, bucket: bucket.bucket, key: [ this.name, asset.fileName ].join( "/" ), tags: {
                 ... this.tags, ... {
                     Name: [ this.name, "Archive" ].join( "-" )
@@ -158,7 +157,7 @@ class Construct extends Lambda {
         } );
 
         /*** Lambda Execution Role */
-        const role = new Provider.iam.IamRole( this, [ this.name, "Execution-Role" ].join( "-" ).toLowerCase(), {
+        const role = new AWS.iam.IamRole( this, [ this.name, "Execution-Role" ].join( "-" ).toLowerCase(), {
             name: [ this.name, "Execution-Role" ].join( "-" ), assumeRolePolicy: IAM.sts, lifecycle: {
                 createBeforeDestroy: false
             }, tags: {
@@ -169,7 +168,7 @@ class Construct extends Lambda {
         } );
 
         /*** Lambda Function */
-        const lambda = new Provider.lambdafunction.LambdaFunction( this, this.name.toLowerCase(), {
+        const lambda = new AWS.lambdafunction.LambdaFunction( this, this.name.toLowerCase(), {
             functionName: this.name,
             handler: this.handler,
             runtime: this.runtime,
@@ -188,7 +187,7 @@ class Construct extends Lambda {
         } );
 
         /*** Inline API Gateway ==> Lambda Invocation */
-        const invocation = new Provider.lambdafunction.LambdaPermission( this,
+        const invocation = new AWS.lambdafunction.LambdaPermission( this,
             [ this.name, "Gateway-Invoke-Permission" ].join( "-" ).toLowerCase(),
             {
                 functionName: lambda.functionName,
@@ -198,7 +197,7 @@ class Construct extends Lambda {
             } );
 
         /*** Managed Policy Permitting Lambda Write Access to CloudWatch */
-        const policy = new Provider.iam.IamRolePolicyAttachment( this,
+        const policy = new AWS.iam.IamRolePolicyAttachment( this,
             [ this.name, "Managed-Policy" ].join( "-" ).toLowerCase(),
             {
                 policyArn: IAM.managed, role: role.name
@@ -230,7 +229,7 @@ class Construct extends Lambda {
          * - passthroughBehavior: "WHEN_NO_MATCH" (Websocket APIs Only)
          */
 
-        const integration = new Provider.apigatewayv2.Apigatewayv2Integration( this,
+        const integration = new AWS.apigatewayv2.Apigatewayv2Integration( this,
             [ this.name, "Gateway-Integration" ].join( "-" ).toLowerCase(),
             {
                 apiId: this.api.id,
@@ -240,7 +239,7 @@ class Construct extends Lambda {
                 integrationUri: lambda.arn
             } );
 
-        const route = new Provider.apigatewayv2.Apigatewayv2Route( this,
+        const route = new AWS.apigatewayv2.Apigatewayv2Route( this,
             [ this.name, "Gateway-Route" ].join( "-" ).toLowerCase(),
             {
                 apiId: this.api.id,
@@ -271,7 +270,7 @@ const Interface: (scope: Constructor,
     name: string,
     description: string,
     uri: string,
-    gateway: API) => Implementation = (scope, id, name, description, uri, gateway) => {
+    gateway: AWS.apigatewayv2.Apigatewayv2Api) => Implementation = (scope, id, name, description, uri, gateway) => {
     return new Implementation( scope, id, name, description, uri, gateway );
 };
 

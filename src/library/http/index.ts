@@ -1,6 +1,5 @@
 import FS from "fs";
 import URI from "url";
-import HTTP from "http";
 import HTTPs from "https";
 import Utility from "util";
 
@@ -110,34 +109,20 @@ type Methods = keyof typeof Method;
 
 class Endpoint {
     url: string | null = null;
-
     origin: string | null = null;
-
     protocol: string | null = null;
-
     username: string | null = null;
-
     password: string | null = null;
-
     host: string | null = null;
-
     hostname: string | null = null;
-
     method: Methods | string | null = null;
-
     port: number | null = null;
-
     pathname: string | null = null;
-
     search: string | null = null;
-
     searchParams: string | null = null;
-
     hash: string | null = null;
-
     rejectUnauthorized: boolean | null = null;
-
-    options: URI.URLFormatOptions;
+    options: URI.URLFormatOptions | any;
 
     static container = [];
 
@@ -147,11 +132,10 @@ class Endpoint {
 
         this.abstract();
 
-        // @ts-ignore
+        /// @ts-ignore
         this.options = URI.urlToHttpOptions( this );
-        // @ts-ignore
+
         this.options.method = this.method;
-        // @ts-ignore
         this.options.rejectUnauthorized = false;
 
         // @ts-ignore
@@ -197,6 +181,8 @@ class Endpoint {
                 value: Properties[$]
             } );
         } );
+
+        return this;
     }
 }
 

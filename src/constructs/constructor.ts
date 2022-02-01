@@ -4,9 +4,10 @@ import Process from "process";
 
 import Utility from "util";
 
-import Ajv from "ajv";
-import AJV, { ValidateFunction as Validate } from "ajv";
 import $ from "ajv-formats";
+
+import V7 from "ajv/dist/refs/json-schema-draft-07.json";
+import AJV, { ValidateFunction as Validate } from "ajv";
 
 type Generic = any;
 
@@ -109,14 +110,14 @@ class Constructor implements Input {
     readonly properties: Properties;
 
     /*** File System Location of Target Schema */
-    target: File;
+    target: File | JSON | {};
 
     /*** List of Required Attributes */
     readonly required?;
     /*** References, JSON Pointers - `$defs`, `definitions` */
     readonly definitions?;
 
-    private static Compiler = new AJV( { strict: true, allowUnionTypes: true } );
+    private static Compiler = new AJV( { strict: false, allowUnionTypes: true, unevaluated: false } );
     private static Debug = Boolean( Process.env?.debug ) ?? false;
 
     /*** Reference Schema for IDE Resolve and Type-Hinting */
@@ -131,8 +132,8 @@ class Constructor implements Input {
 
     private readonly compilation: Validate<{ [Symbol.iterator](): Iterator<readonly [ (string | number | symbol), Property ]> }>;
 
-    constructor(name: string, schema: File, debug: boolean = Constructor.Debug) {
-        const $: typeof Constructor.Reference = Import( String( schema ) );
+    constructor(name: string, schema: File | JSON | {}, debug: boolean = Constructor.Debug) {
+        const $: typeof Constructor.Reference = (Constructor.serializable(schema) && !FS.existsSync(String(schema) ?? true)) ? schema: Import( String( schema ) );
 
         this.target = schema;
 
@@ -162,7 +163,7 @@ class Constructor implements Input {
     }
 
     /*** Data Validator */
-    public validate(data: any): Ajv {
+    public validate(data: any): AJV {
         Constructor.Compiler.validate( this.compilation.schema, data );
 
         return Constructor.Compiler;
@@ -230,6 +231,16 @@ class Constructor implements Input {
         }
 
         return $;
+    }
+
+    private static serializable (input: any) {
+        try {
+            JSON.stringify( input, null, 4 );
+        } catch (e) {
+            return false;
+        }
+
+        return true;
     }
 
     /***

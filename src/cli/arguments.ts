@@ -4,6 +4,6 @@ import { hideBin } from "yargs/helpers";
 
 type Argument = Arguments.Argv;
 
-export { Arguments, hideBin };
+export { Arguments as CLI, hideBin };
 
 export type { Argv, Argument };

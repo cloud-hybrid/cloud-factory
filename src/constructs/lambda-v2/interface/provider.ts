@@ -1,4 +1,4 @@
-import AWS from "@cdktf/provider-aws";
+import * as AWS from "@internal/aws";
 
 type Type = typeof AWS;
 

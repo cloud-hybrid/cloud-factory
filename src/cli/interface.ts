@@ -2,7 +2,7 @@ import Chalk from "chalk";
 import Process from "process";
 import Colors from "../utilities/colors.js";
 import TTY, { Columns } from "../utilities/tty.js";
-import { Arguments as CLI, Argv } from "./arguments.js";
+import { CLI, Argv } from "./arguments.js";
 
 import { Header } from "./header.js";
 
@@ -18,7 +18,7 @@ const Main = async () => {
     const Arguments = async () => {
         const Commands = {
             cwd: async (input: Argv) => (await import("../commands/environment/cwd.js")).CWD( input ),
-            environment: async (input: Argv) => (await import("../commands/environment/configuration.js")).Configuration(
+            environment: async (input: Argv) => (await import("../commands/environment/configuration.js")).NPM(
                 input ),
             input: async (input: Argv) => (await import("../commands/prompt")).JSON( input ),
             git: async (input: Argv) => (await import("../commands/git-template")).Git(input),

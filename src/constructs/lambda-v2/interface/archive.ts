@@ -1,8 +1,10 @@
-import { DataArchiveFile, DataArchiveFileSource } from "@cdktf/provider-archive";
+import * as Archive from "@internal/archive";
+
+const { DataArchiveFile } = Archive;
 
 const File = DataArchiveFile;
 
-type Source = DataArchiveFileSource;
+type Source = Archive.DataArchiveFileSource;
 
 export { File };
 export type { Source };

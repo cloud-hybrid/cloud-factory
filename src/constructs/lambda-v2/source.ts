@@ -1,11 +1,5 @@
-import { Fn, Resource } from "cdktf";
-import { Construct } from "constructs";
-import { cloudwatch, iam, lambdafunction, s3 } from "@cdktf/provider-aws";
-import { DataArchiveFile, DataArchiveFileSource } from "@cdktf/provider-archive";
-
 import * as Interface from "./interface";
 
-type Type = typeof Interface.Module.Function.LambdaFunction;
 type Policy = typeof Interface.Module.IAM.IamPolicy;
 
 const DEFAULT_TIMEOUT = 5;

@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-await import("./distribution/src/index.js");
+import("./src/index.js");

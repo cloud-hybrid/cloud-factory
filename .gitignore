@@ -33,3 +33,21 @@ cdktf.out/**
 
 *.tgz
 *.zip
+
+tsconfig.tsbuildinfo
+
+src/**/*.js
+src/**/*.map
+src/**/*.d.ts
+
+@types/**/*.js
+@types/**/*.map
+@types/**/*.d.ts
+
+.terraform
+
+.terraform.tfstate
+.terraform.tfstate.backup
+.terraform.tfstate.backup.*
+
+tf/**/.terraform.lock.hcl

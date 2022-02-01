@@ -1,11 +1,14 @@
 import Process from "process";
-import TTY from "tty";
 
-const Device = TTY.isatty( Process.stdout.fd );
+import $ from "tty";
+
+const Device = $.isatty( Process.stdout.fd );
+
+const TTY = Device;
 
 const Rows = () => ( Device ) ? Process.stdout.rows : null;
 const Columns = () => ( Device ) ? Process.stdout.columns : null;
 
-export { Device, Rows, Columns };
+export { TTY, Device, Rows, Columns };
 
 export default Device;

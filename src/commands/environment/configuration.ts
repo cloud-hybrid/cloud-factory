@@ -319,6 +319,6 @@ const Command = async ($: Argv) => {
     } ).strict();
 };
 
-export { Command as Configuration };
+export { Command as NPM };
 
 export default { Command };

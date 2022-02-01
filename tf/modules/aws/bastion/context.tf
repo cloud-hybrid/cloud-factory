@@ -1,0 +1,202 @@
+#
+# ONLY EDIT THIS FILE IN github.com/cloudposse/terraform-null-label
+# All other instances of this file should be a copy of that one
+#
+#
+# Copy this file from https://github.com/cloudposse/terraform-null-label/blob/master/exports/context.tf
+# and then place it in your Terraform module to automatically get
+# Cloud Posse's standard configuration inputs suitable for passing
+# to Cloud Posse modules.
+#
+# Modules should access the whole context as `module.this.context`
+# to get the input variables with nulls for defaults,
+# for example `context = module.this.context`,
+# and access individual variables as `module.this.<var>`,
+# with final values filled in.
+#
+# For example, when using defaults, `module.this.context.delimiter`
+# will be null, and `module.this.delimiter` will be `-` (hyphen).
+#
+
+module "this" {
+  source  = "cloudposse/label/null"
+  version = "0.24.1" # requires Terraform >= 0.13.0
+
+  enabled             = var.enabled
+  namespace           = var.namespace
+  environment         = var.environment
+  stage               = var.stage
+  name                = var.name
+  delimiter           = var.delimiter
+  attributes          = var.attributes
+  tags                = var.tags
+  additional-tag-map  = var.additional-tag-map
+  label-order         = var.label-order
+  regular-expression-replace-characters = var.regular-expression-replace-characters
+  id-length-limit     = var.id-length-limit
+  label-key-casing      = var.label-key-casing
+  label-value-casing    = var.label-value-casing
+
+  context = var.context
+}
+
+# Copy contents of cloudposse/terraform-null-label/variables.tf here
+
+variable "context" {
+  type = any
+  default = {
+    enabled             = true
+    namespace           = null
+    environment         = null
+    stage               = null
+    name                = null
+    delimiter           = null
+    attributes          = []
+    tags                = {}
+    additional-tag-map  = {}
+    regular-expression-replace-characters = null
+    label-order         = []
+    id-length-limit     = null
+    label-key-casing      = null
+    label-value-casing    = null
+  }
+  description = <<-EOT
+    Single object for setting entire context at once.
+    See description of individual variables for details.
+    Leave string and numeric variables as `null` to use default value.
+    Individual variable settings (non-null) override settings in context object,
+    except for attributes, tags, and additional-tag-map, which are merged.
+  EOT
+
+  validation {
+    condition     = lookup(var.context, "label-key-casing", null) == null ? true : contains(["lower", "title", "upper"], var.context["label-key-casing"])
+    error_message = "Allowed values: `lower`, `title`, `upper`."
+  }
+
+  validation {
+    condition     = lookup(var.context, "label-value-casing", null) == null ? true : contains(["lower", "title", "upper", "none"], var.context["label-value-casing"])
+    error_message = "Allowed values: `lower`, `title`, `upper`, `none`."
+  }
+}
+
+variable "enabled" {
+  type        = bool
+  default     = null
+  description = "Set to false to prevent the module from creating any resources"
+}
+
+variable "namespace" {
+  type        = string
+  default     = null
+  description = "Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp'"
+}
+
+variable "environment" {
+  type        = string
+  default     = null
+  description = "Environment, e.g. 'uw2', 'us-west-2', OR 'prod', 'staging', 'dev', 'UAT'"
+}
+
+variable "stage" {
+  type        = string
+  default     = null
+  description = "Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release'"
+}
+
+variable "name" {
+  type        = string
+  default     = null
+  description = "Solution name, e.g. 'app' or 'jenkins'"
+}
+
+variable "delimiter" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`.
+    Defaults to `-` (hyphen). Set to `""` to use no delimiter at all.
+  EOT
+}
+
+variable "attributes" {
+  type        = list(string)
+  default     = []
+  description = "Additional attributes (e.g. `1`)"
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
+}
+
+variable "additional-tag-map" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags for appending to tags_as_list_of_maps. Not added to `tags`."
+}
+
+variable "label-order" {
+  type        = list(string)
+  default     = null
+  description = <<-EOT
+    The naming order of the id output and Name tag.
+    Defaults to ["namespace", "environment", "stage", "name", "attributes"].
+    You can omit any of the 5 elements, but at least one must be present.
+  EOT
+}
+
+variable "regular-expression-replace-characters" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.
+    If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits.
+  EOT
+}
+
+variable "id-length-limit" {
+  type        = number
+  default     = null
+  description = <<-EOT
+    Limit `id` to this many characters (minimum 6).
+    Set to `0` for unlimited length.
+    Set to `null` for default, which is `0`.
+    Does not affect `id_full`.
+  EOT
+  validation {
+    condition     = var.id-length-limit == null ? true : var.id-length-limit >= 6 || var.id-length-limit == 0
+    error_message = "The id-length-limit must be >= 6 if supplied (not null), or 0 for unlimited length."
+  }
+}
+
+variable "label-key-casing" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    The letter case of label keys (`tag` names) (i.e. `name`, `namespace`, `environment`, `stage`, `attributes`) to use in `tags`.
+    Possible values: `lower`, `title`, `upper`.
+    Default value: `title`.
+  EOT
+
+  validation {
+    condition     = var.label-key-casing == null ? true : contains(["lower", "title", "upper"], var.label-key-casing)
+    error_message = "Allowed values: `lower`, `title`, `upper`."
+  }
+}
+
+variable "label-value-casing" {
+  type        = string
+  default     = null
+  description = <<-EOT
+    The letter case of output label values (also used in `tags` and `id`).
+    Possible values: `lower`, `title`, `upper` and `none` (no transformation).
+    Default value: `lower`.
+  EOT
+
+  validation {
+    condition     = var.label-value-casing == null ? true : contains(["lower", "title", "upper", "none"], var.label-value-casing)
+    error_message = "Allowed values: `lower`, `title`, `upper`, `none`."
+  }
+}
+#### End of copy of cloudposse/terraform-null-label/variables.tf
