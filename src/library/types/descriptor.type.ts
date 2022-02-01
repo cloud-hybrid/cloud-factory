@@ -1,9 +1,11 @@
+import type Dirent from "fs";
+
 /***
  * File Descriptor
  * ---------------
  * The File Descriptor Type
  *
- * @augments {FS.Dirent}
+ * @augments {Dirent}
  *
  */
 
