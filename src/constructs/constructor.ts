@@ -6,7 +6,6 @@ import Utility from "util";
 
 import $ from "ajv-formats";
 
-import V7 from "ajv/dist/refs/json-schema-draft-07.json";
 import AJV, { ValidateFunction as Validate } from "ajv";
 
 type Generic = any;

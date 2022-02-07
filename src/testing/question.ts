@@ -2,8 +2,6 @@ import Process from "process";
 import Utility from "util";
 import $ from "inquirer";
 
-const Clear = Utility.promisify( Process.stdout.clearLine );
-
 const characters = (value: any) => {
     if ( !valid( value ) ) {
         return "[Warning] Input Value Required (String)";

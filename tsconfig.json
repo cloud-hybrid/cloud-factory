@@ -17,6 +17,11 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noUnusedLocals": false,
+        "baseUrl": ".",
+        "rootDirs": [
+            "@types",
+            "src"
+        ],
         "noUnusedParameters": true,
         "resolveJsonModule": true,
         "declarationMap": true,
@@ -64,9 +69,9 @@
         "**/*.js"
     ],
     "include": [
-        "@types",
-        "**/*.json",
-        "**/*.ts",
+        "@types/**/*.ts",
+        "src/**/*.json",
+        "src/**/*.ts",
         "index.js"
     ]
 }
