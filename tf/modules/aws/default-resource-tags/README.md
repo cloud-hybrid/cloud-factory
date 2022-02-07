@@ -18,8 +18,6 @@
 
 **::: --- Boilerplate --- :::**
 
----
-
 ## IaC ##
 
 ### Setup & Runtime ###

@@ -44,8 +44,6 @@ content: |
 
     {{ include "./configuration/documentation/overview.md" }}
 
-    ---
-
     ## IaC ##
 
     ### Setup & Runtime ###

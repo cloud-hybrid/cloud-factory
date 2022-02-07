@@ -2,7 +2,7 @@
 
 [//]: # ([User-Input] | configuration/documentation/overview.md)
 
-# [`account-settings`](https://github.com/cloud-hybrid) - *Terraform* #
+# [`aws-account-settings`](https://github.com/cloud-hybrid) - *Terraform* #
 
 *Infrastructure as Code*
 
@@ -17,8 +17,6 @@
 [//]: # ([User-Input] | configuration/documentation/overview.md)
 
 **::: --- Boilerplate --- :::**
-
----
 
 ## IaC ##
 
