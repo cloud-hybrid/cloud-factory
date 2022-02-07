@@ -6,8 +6,6 @@ import { CLI, Argv } from "./arguments.js";
 
 import { Header } from "./header.js";
 
-const Factory = await import("../commands/factory/index.js");
-const Casing = await import("../commands/string/index.js");
 const Template = await import("../commands/template-engine/index.js");
 const API = await import("../commands/api/index.js");
 
@@ -24,14 +22,14 @@ const Main = async () => {
             git: async (input: Argv) => (await import("../commands/git-template")).Git(input),
             version: (await import("../commands/version.js")).Version,
             factory: {
-                deploy: async (input: Argv) => await Factory.Deploy( input ),
-                synthesize: async (input: Argv) => await Factory.Synthesize( input ),
-                initialize: async (input: Argv) => await Factory.Initialize( input ),
-                "build-layer": async (input: Argv) => await Factory.Layer( input )
+                deploy: async (input: Argv) => (await import("../commands/factory/deploy")).Deploy( input ),
+                synthesize: async (input: Argv) => (await import("../commands/factory/synthesize")).Synthesize( input ),
+                initialize: async (input: Argv) => (await import("../commands/factory/initialize")).Initialize( input ),
+                "build-layer": async (input: Argv) => (await import("../commands/factory/build-layer")).Layer( input )
             },
             case: {
-                "train-case": async (input: Argv) => await Casing.Train( input ),
-                "screaming-train-case": async (input: Argv) => await Casing.Scream( input )
+                "train-case": async (input: Argv) => (await import("../commands/string/train-case")).Train( input ),
+                "screaming-train-case": async (input: Argv) => (await import("../commands/string/screaming-train-case")).Scream( input )
             },
             template: {
                 "hydrate": async (input: Argv) => await Template.Render( input )

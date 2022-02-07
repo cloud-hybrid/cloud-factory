@@ -4,12 +4,7 @@
     "projectId": "8f9df91a-2ed3-4636-942f-dcbaadb53a9b",
     "terraformProviders": [
         "aws",
-        "archive",
-        "external",
-        "time",
-        "local",
-        "random",
-        "null"
+        "archive"
     ],
     "codeMakerOutput": "@types",
     "output": "distribution",

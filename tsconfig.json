@@ -49,6 +49,7 @@
         "extendedDiagnostics": true,
         "downlevelIteration": false,
         "useDefineForClassFields": true,
+        "assumeChangesOnlyAffectDirectDependencies": true,
         "allowUnreachableCode": true,
         "strictNullChecks": true,
         "plugins": [
