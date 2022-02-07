@@ -1,6 +1,6 @@
-import Process from "process";
-import Utility from "util";
 import $ from "inquirer";
+
+import Process from "process";
 
 const characters = (value: any) => {
     if ( !valid( value ) ) {

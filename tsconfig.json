@@ -8,6 +8,9 @@
         "emitBOM": false,
         "incremental": true,
         "sourceMap": true,
+        "listFilesOnly": false,
+        "listEmittedFiles": false,
+        "listFiles": false,
         "inlineSourceMap": false,
         "noEmitOnError": true,
         "noFallthroughCasesInSwitch": true,
@@ -17,11 +20,6 @@
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noUnusedLocals": false,
-        "baseUrl": ".",
-        "rootDirs": [
-            "@types",
-            "src"
-        ],
         "noUnusedParameters": true,
         "resolveJsonModule": true,
         "declarationMap": true,
@@ -48,7 +46,7 @@
         "target": "ESNext",
         "composite": true,
         "diagnostics": true,
-        "importHelpers": true,
+        "importHelpers": false,
         "isolatedModules": true,
         "disableSizeLimit": true,
         "extendedDiagnostics": true,
@@ -56,12 +54,7 @@
         "useDefineForClassFields": true,
         "assumeChangesOnlyAffectDirectDependencies": true,
         "allowUnreachableCode": true,
-        "strictNullChecks": true,
-        "plugins": [
-            {
-                "name": "typescript-eslint-language-service"
-            }
-        ]
+        "strictNullChecks": true
     },
     "exclude": [
         "**/*.map",

@@ -63,11 +63,7 @@
         "@typescript-eslint/utils": "latest",
         "eslint": "latest",
         "source-map-support": "latest",
-        "ts-jest": "latest",
-        "ts-node": "latest",
-        "tslib": "latest",
-        "typescript": "latest",
-        "typescript-eslint-language-service": "latest"
+        "typescript": "latest"
     },
     "exports": {
         ".": "./src/cli/index.js",

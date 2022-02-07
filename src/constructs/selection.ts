@@ -1,14 +1,8 @@
-import FS from "fs";
-import Path from "path";
 import Process from "process";
 
 import Assertion from "assert";
 
-import { Constructor } from "./constructor";
-
-const Module = Path.dirname(import.meta.url.replace("file://", ""));
-
-import Prompt, { PromptModule, QuestionCollection, StreamOptions } from "inquirer";
+import Prompt, { PromptModule, StreamOptions } from "inquirer";
 
 interface Input {
     /*** The Input Option Name */
@@ -26,7 +20,6 @@ interface Input {
 class Option implements Input {
     name;
     value;
-
     extra?
 
     type = "choice";
@@ -57,53 +50,14 @@ class Handler {
      * @param {Input[]} options
      *
      */
-    constructor (options: Option[]) {
+    constructor(options: Option[]) {
         this.options = options;
-        this.prompt = Prompt.createPromptModule(Handler.stream);
+        this.prompt = Prompt.createPromptModule( Handler.stream );
 
         /*** @todo - Ensure there becomes an environment variable that will turn off this runtime assertion */
-        Assertion.equal(Handler.stream.input?.isTTY, true);
+        Assertion.equal( Handler.stream.input?.isTTY, true );
     }
 }
-
-//const Questions: Questions = [
-//    {
-//        name: "test",
-//        choices: [
-//            {
-//                name: "Choice-1",
-//                value: "1"
-//            },
-//            {
-//                name: "Choice-1",
-//                value: "1"
-//            },
-//            {
-//                name: "Choice-1",
-//                value: "1"
-//            },
-//        ], loop: true,
-//        message: "Test Message",
-//        type: "list"
-//    }
-//];
-//
-//Prompt(Questions).then(($) => {
-//    console.log($);
-//});
-//
-//
-//const Configuration = async () => ($?.debug)
-//    ? await Prompt(true) : await Prompt(false);
-//
-//const Object = await Configuration();
-//const Inspection = Utility.inspect(Object, {
-//    colors: true,
-//    breakLength: 120,
-//    depth: Infinity,
-//    showProxy: true,
-//    showHidden: true
-//});
 
 export { Handler, Option };
 export default Handler;
