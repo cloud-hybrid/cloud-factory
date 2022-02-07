@@ -50,3 +50,8 @@ variable "organization" {
     default     = "Cloud Technology"
 }
 
+variable "profile" {
+    type = string
+    description = "AWS Default Credentials Profile"
+    default = null
+}

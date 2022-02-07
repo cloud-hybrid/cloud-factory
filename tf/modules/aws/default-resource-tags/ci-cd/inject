@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+terraform-docs markdown table --output-file "${PWD}/README.md" --output-mode inject "${PWD}" --config "${PWD}/configuration/documentation.yaml" &>/dev/null
+
+[[ ${?} == 0 ]] && echo "Successfully Generated Documentation"
+
+exit ${?}

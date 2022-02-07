@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+terraform-docs tfvars json . > "${PWD}/configuration/tfvars.json"
+terraform-docs tfvars hcl . > "${PWD}/configuration/tfvars"
+
+[[ ${?} == 0 ]] && echo "Successfully Generated Input-Variable Files"
+
+exit ${?}

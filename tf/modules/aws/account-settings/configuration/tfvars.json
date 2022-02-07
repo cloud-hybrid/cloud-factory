@@ -1,0 +1,14 @@
+{
+  "alias": "Cloud-Technology",
+  "allow-user-updates": true,
+  "expiration": false,
+  "identity": true,
+  "lowercase": true,
+  "max-age": 0,
+  "minimum-length": 8,
+  "numbers": true,
+  "password-policy": true,
+  "prevent-reuse": true,
+  "special-characters": true,
+  "uppercase": true
+}

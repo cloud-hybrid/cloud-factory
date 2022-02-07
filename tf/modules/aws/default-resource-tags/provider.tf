@@ -1,15 +1,16 @@
 provider "aws" {
     default_tags {
         tags = {
-            tf = var.tf
-            cfn = var.cfn
-            cloud = var.cloud
-            creator = var.creator
-            service = var.service
-            environment = var.environment
-            organization = var.organization
+            TF = title(var.tf)
+            CFN = title(var.cfn)
+            Cloud = title(var.cloud)
+            Creator = title(var.creator)
+            Service = title(var.service)
+            Environment = title(var.environment)
+            Organization = title(var.organization)
         }
     }
 
+    profile = (var.profile != null) ? var.profile : "default"
     region = var.region
 }

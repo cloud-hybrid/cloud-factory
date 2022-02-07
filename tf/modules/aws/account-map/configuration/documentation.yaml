@@ -1,0 +1,151 @@
+# # see: https://terraform-docs.io/user-guide/configuration/version
+# version: ">= 0.10, < 0.12"
+
+# see: https://terraform-docs.io/user-guide/configuration/formatter
+formatter: markdown table
+
+# see: https://terraform-docs.io/user-guide/configuration/header-from
+header-from: ./configuration/documentation/header.md
+
+# see: https://terraform-docs.io/user-guide/configuration/footer-from
+footer-from: ./configuration/documentation/footer.md
+
+# see: https://terraform-docs.io/user-guide/configuration/recursive
+# recursive:
+#    enabled: true
+#   path: modules
+
+# see: https://terraform-docs.io/user-guide/configuration/sections
+# sections:
+#     show:
+#         - header
+#         - inputs
+#         - resources
+#         - data-sources
+#         - providers
+#         # - modules
+#         - outputs
+#         - requirements
+#         - footer
+
+# # see: https://terraform-docs.io/user-guide/configuration/content
+content: |
+    # {{ .Header }} #
+
+    *Infrastructure as Code*
+
+    ## Table of Contents ##
+
+    [[_TOC_]]
+
+    ---
+
+    ## Overview ##
+
+    {{ include "./configuration/documentation/overview.md" }}
+
+    ---
+
+    ## IaC ##
+
+    ### Setup & Runtime ###
+
+    The following package(s) & Terraform provider(s) are required
+    in order to manage the following infrastructure.
+
+    {{ .Requirements }}
+
+    ## Package ##
+
+    ### Pipeline & Local Input ###
+
+    The following variables are required for an autonomous deployment.
+
+    ##### Example Input File(s) #####
+
+    ***`terraform.tfvars`*** - **Note**: empty string(s) are required to be populated via the user, or the ci-cd runtime.
+
+    ```hcl
+    {{ include "./configuration/tfvars" }}
+    ```
+
+    ***`terraform.tfvars.json`*** - **Note**: `null` value(s) are required to be populated via the user, or the ci-cd runtime.
+
+    ```json
+    {{ include "./configuration/tfvars.json" }}
+    ```
+
+    {{ .Inputs }}
+
+    Additionally, please note that **only the `terraform.tfvars` file is automatically searched for**; if `terraform.tfvars.json`
+    -- or any arbitrary `*.json` file -- is instead the target input file, then the `--var-file` flag needs to be
+    included.
+
+    With the required variables defined via `terraform.tfvars`, execute a `terraform`
+    related command(s) via:
+
+    ```bash
+    terraform validate
+    terraform plan --out "local-state"
+    terraform apply --state "local-state" --state-out "local-state.archive"
+    ```
+
+    or via a `terraform.tfvars.json` (or another type of `*.json` file) ...
+
+    ```bash
+    terraform validate --json
+    terraform plan --out "local-state" --var-file "terraform.tfvars.json"
+    terraform apply --state "local-state" --state-out "local-state.archive" --var-file "terraform.tfvars.json"
+    ```
+
+    ---
+
+    {{ .Resources }}
+
+    {{ .Modules }}
+
+    {{ .Outputs }}
+
+    {{ .Providers }}
+
+    ---
+
+    {{ .Footer }}
+
+output:
+    file: README.md
+    mode: inject
+    template: |-
+        [//]: # (<!-- BEGIN_TF_DOCS -->)
+
+        [//]: # ([User-Input] | configuration/documentation/overview.md)
+
+        {{ .Content }}
+
+        [//]: # (<!-- END_TF_DOCS -->)
+
+# see: https://terraform-docs.io/user-guide/configuration/sort
+sort:
+    enabled: true
+    by: required
+
+# https://terraform-docs.io/user-guide/configuration/output-values/
+# output-values:
+#   enabled: false
+#   from: ""
+
+# https://terraform-docs.io/user-guide/configuration/settings
+settings:
+    anchor: true
+    color: true
+    default: true
+    description: true
+    escape: true
+    hide-empty: false
+    html: true
+    indent: 4
+    lockfile: false
+    read-comments: true
+    required: true
+    sensitive: true
+    type: true
