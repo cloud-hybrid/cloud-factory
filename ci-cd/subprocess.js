@@ -1,14 +1,20 @@
-import Spawn from "child_process";
 import Process from "process";
+import Spawn from "child_process";
 
-const Subprocess = async (command: string, directory: string = Process.cwd(), debug: boolean = false) => {
-    (debug) && console.log( "[Debug]", "Subprocess Command" + ":", command, "\n" );
-    (debug) && console.debug( "[Debug]", "Current Working Directory" + ":", directory, "\n" );
-
+/***
+ * Subprocess Spawner
+ *
+ * @param {string} command
+ * @param {string} directory
+ * @returns {Promise<boolean>}
+ *
+ * @constructor
+ */
+const Subprocess = async (command, directory = Process.cwd()) => {
     const Binary = command.split( " " )[ 0 ];
     const Arguments = command.split( " " ).splice( 1 );
 
-    const Awaitable = new Promise<Spawn.ChildProcessWithoutNullStreams>( (resolve) => {
+    const Awaitable = new Promise( (resolve) => {
         const Stream = {
             PID: -1, Status: "", Signal: ""
         };
@@ -38,7 +44,7 @@ const Subprocess = async (command: string, directory: string = Process.cwd(), de
 
             Data.Error.push( Output );
 
-            (debug) && Process.stdout.write( Output );
+            Process.stdout.write( Output );
         } );
 
         Error.on( "data", (_) => {

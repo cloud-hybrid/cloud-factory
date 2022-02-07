@@ -54,24 +54,20 @@ const TS = {
 
 const CDKTF = {
     "language": "typescript",
-    "app": "node Stack.js",
-    /// "output": "cdktf.out",
+    "app": "node --es-module-specifier-resolution node ./src/constructs",
+    "projectId": "8f9df91a-2ed3-4636-942f-dcbaadb53a9b",
     "terraformProviders": [
         "aws",
-        "archive",
-        "external",
-        "time",
-        "local",
-        "random",
-        "null"
+        "archive"
     ],
+    "codeMakerOutput": "@types",
+    "output": "distribution",
     "terraformModules": [],
     "context": {
         "excludeStackIdFromLogicalIds": "true",
         "allowSepCharsInLogicalIds": "true"
     }
-    /// "codeMakerOutput": "@imports"
-};
+}
 
 const Package = {
     "name": "@cloud-factory/deployable",
@@ -89,11 +85,11 @@ const Package = {
         "upgrade:next": "npm i cdktf@next cdktf-cli@next"
     },
     "engines": {
-        "node": ">=14"
+        "node": ">=16"
     },
     "dependencies": {
-        "cdktf": "^0.8.6",
-        "cdktf-cli": "^0.8.6",
+        "cdktf": "^0.9",
+        "cdktf-cli": "^0.9",
         "constructs": "^10.0.31",
 
         "@cdktf/provider-aws": "^3.0.1",
@@ -262,8 +258,8 @@ const Command = async ($: Argv) => {
 
             console.debug( "[Debug] Cloud-Factory Output Target" + ":", Target, "\n" );
 
-            FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
-            FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
+            // FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
+            // FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
 
             await Subprocess( "npm install --silent", Path.join( Process.cwd() ) );
 

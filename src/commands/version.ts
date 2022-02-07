@@ -1,21 +1,26 @@
-import Module from "module";
+import FS from "fs";
 import Path from "path";
 
 /*** *Current Working Directory* */
-const CWD: string = Path.dirname( import.meta.url.replace( "file" + ":" + "/", "" ) );
+const CWD: string = Path.dirname( import.meta.url.replace( "file" + ":" + "//", "" ) );
 
-/***
- *  JSON Capable Importer
- *
- *  @type {NodeRequire}
- *
- */
+/*** *Source Working Directory* */
+const Source: string = Path.dirname(CWD);
 
-const Import = Module.createRequire( CWD );
-const Package = Import( "../../package.json" );
+/*** *Package Working Directory* */
+const PKG: string = Path.dirname(Source);
+
+// /*** JSON Capable Importer */
+// const Import: NodeRequire = Module.createRequire( CWD );
+
+// /*** @type {typeof import("../../package.json")} */
+
+/// const Package: typeof import("../../package.json") = Import("../../package.json");
+
+const Package = JSON.parse(FS.readFileSync(Path.join(CWD, "..", "..", "package.json"), { encoding: "utf-8" }));
 
 // Package Version
-const Version: [ string, string ] = [ "version", JSON.stringify( Package.version, null, 4 ) + "\n" ];
+const Version: [ string, string ] = [ "version", Package.version + "\n" ];
 
 export { Version };
 

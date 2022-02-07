@@ -1,0 +1,13 @@
+{
+    "name": "ci-cd",
+    "private": true,
+    "main": "index.js",
+    "version": "0.0.0",
+    "type": "module",
+    "bin": {
+        "ci-cd": "install.js"
+    },
+    "devDependencies": {
+        "@types/node": "latest"
+    }
+}

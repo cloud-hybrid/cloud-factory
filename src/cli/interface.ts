@@ -1,9 +1,9 @@
 import Chalk from "chalk";
 import Process from "process";
 import Colors from "../utilities/colors.js";
+
 import TTY, { Columns } from "../utilities/tty.js";
 import { CLI, Argv } from "./arguments.js";
-
 import { Header } from "./header.js";
 
 const Template = await import("../commands/template-engine/index.js");
@@ -19,17 +19,17 @@ const Main = async () => {
             environment: async (input: Argv) => (await import("../commands/environment/configuration.js")).NPM(
                 input ),
             input: async (input: Argv) => (await import("../commands/prompt")).JSON( input ),
-            git: async (input: Argv) => (await import("../commands/git-template")).Git(input),
+            git: async (input: Argv) => (await import("../commands/git-template")).Git( input ),
             version: (await import("../commands/version.js")).Version,
             factory: {
-                deploy: async (input: Argv) => (await import("../commands/factory/deploy")).Deploy( input ),
-                synthesize: async (input: Argv) => (await import("../commands/factory/synthesize")).Synthesize( input ),
-                initialize: async (input: Argv) => (await import("../commands/factory/initialize")).Initialize( input ),
-                "build-layer": async (input: Argv) => (await import("../commands/factory/build-layer")).Layer( input )
+                deploy: async (input: Argv) => (await import("../commands/factory/deploy.js")).Deploy( input ),
+                synthesize: async (input: Argv) => (await import("../commands/factory/synthesize.js")).Synthesize( input ),
+                initialize: async (input: Argv) => (await import("../commands/factory/initialize.js")).Initialize( input ),
+                "build-layer": async (input: Argv) => (await import("../commands/factory/build-layer.js")).Layer( input )
             },
             case: {
-                "train-case": async (input: Argv) => (await import("../commands/string/train-case")).Train( input ),
-                "screaming-train-case": async (input: Argv) => (await import("../commands/string/screaming-train-case")).Scream( input )
+                "train-case": async (input: Argv) => (await import("../commands/string/train-case.js")).Train( input ),
+                "screaming-train-case": async (input: Argv) => (await import("../commands/string/screaming-train-case.js")).Scream( input )
             },
             template: {
                 "hydrate": async (input: Argv) => await Template.Render( input )
@@ -65,10 +65,10 @@ const Main = async () => {
 
                 $.command( commands[0], "Hydrate Template File", (
                     async ($: Argv) => {
-                        $.option( "file", { type: "string" } ).alias( "file", "f" ).describe( "file", Colors( "Bright-White", "Template File Path (Required, Prompt)" ) ).default( "file", null )
+                        $.option( "file", { type: "string" } ).alias( "file", "f" ).describe( "file", Colors( "Bright-White", "Template File Path (Required, Prompt)" ) ).default( "file", null );
                         $.option( "output", { type: "string" } ).alias( "output", "o" ).describe( "output", Colors( "Bright-White", "Hydrated Template Output Path (Required, Prompt)" ) ).default( "output", null );
 
-                        await Commands.template.hydrate( $ )
+                        await Commands.template.hydrate( $ );
                     }) );
             }) )
 
@@ -108,7 +108,8 @@ const Main = async () => {
                 $.command( commands[1], "Create AWS Secret", (
                     async ($: Argv) => {
                         /*** Namespace'd Example(s) */
-                        $.example( "Create Secret", script + " " + name + " " + commands[1] + " " + "--name \"IBM/Production/Audit-Service/Storage/Watson-AI/Credentials\" --description \"IBM Watson Storage Login Credentials\" --secret \"input.json\"" );
+                        $.example( "Create Secret",
+                            script + " " + name + " " + commands[1] + " " + "--name \"IBM/Production/Audit-Service/Storage/Watson-AI/Credentials\" --description \"IBM Watson Storage Login Credentials\" --secret \"input.json\"" );
 
                         $.option( "name", { type: "string" } ).alias( "name", "n" ).describe( "name", Colors( "Bright-White", "Resource Name" ) ).default( "name", null );
                         $.option( "description", { type: "string" } ).alias( "description", "d" ).describe( "description", Colors( "Bright-White", "Usage Description" ) ).default( "description", null );

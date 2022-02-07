@@ -9,7 +9,7 @@
         "incremental": true,
         "sourceMap": true,
         "listFilesOnly": false,
-        "listEmittedFiles": true,
+        "listEmittedFiles": false,
         "listFiles": false,
         "inlineSourceMap": false,
         "noEmitOnError": true,
@@ -25,15 +25,11 @@
         "declarationMap": true,
         "strictFunctionTypes": true,
         "allowSyntheticDefaultImports": true,
-        "noErrorTruncation": true,
-        "preserveSymlinks": true,
         "esModuleInterop": true,
         "exactOptionalPropertyTypes": false,
         "forceConsistentCasingInFileNames": true,
         "lib": [
-            "ES2021",
-            "ESNext",
-            "DOM"
+            "ESNext", "DOM"
         ],
         "module": "ESNext",
         "moduleResolution": "Node",
@@ -51,12 +47,9 @@
         "extendedDiagnostics": true,
         "downlevelIteration": false,
         "useDefineForClassFields": true,
-        "assumeChangesOnlyAffectDirectDependencies": false,
+        "assumeChangesOnlyAffectDirectDependencies": true,
         "allowUnreachableCode": true,
-        "strictNullChecks": true,
-        "disableReferencedProjectLoad": true,
-        "disableSolutionSearching": true,
-        "disableSourceOfProjectReferenceRedirect": false
+        "strictNullChecks": true
     },
     "exclude": [
         "**/*.map",
@@ -65,7 +58,6 @@
     ],
     "include": [
         "**/*.ts",
-        "**/*.json",
-        "index.js"
+        "**/*.json"
     ]
 }
