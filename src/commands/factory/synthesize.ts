@@ -258,8 +258,8 @@ const Command = async ($: Argv) => {
 
             console.debug( "[Debug] Cloud-Factory Output Target" + ":", Target, "\n" );
 
-            // FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
-            // FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
+             FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
+             FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
 
             await Subprocess( "npm install --silent", Path.join( Process.cwd() ) );
 

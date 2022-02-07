@@ -31,6 +31,51 @@ function Configuration(Arguments: Argv) {
     Arguments.describe( "debug", "Enable Debug Logging" );
 }
 
+/*** Exclusions to Avoid Recursive Parsing; i.e. libraries, lambda-layers, or otherwise bundled requirements */
+const Exclusions = [ ".git", ".idea", ".vscode", "cdktf.out", "templates", "documentation", "scripts" ];
+
+/***
+ * Recursive Copy Function
+ * -----------------------
+ * *Note* - this will perform *actual, real copies*; symbolic links are resolved to their raw pointer location(s).
+ *
+ * These are important considerations especially when building for reproducible distributions.
+ *
+ * @param source {string} Original Source Path
+ * @param target {string} Target Copy Destination
+ *
+ * @param debug {boolean}
+ * @constructor
+ *
+ */
+
+function Copy(source: string, target: string, debug: boolean = false) {
+    FS.mkdirSync( target, { recursive: true } );
+    FS.readdirSync( source,
+        { withFileTypes: true } ).filter( ($) => ( !Exclusions.includes( $.name ) ) ).forEach( ($) => {
+        const Directory = FS.lstatSync( Path.join( source, $.name ), { throwIfNoEntry: true } ).isDirectory();
+        const File = FS.lstatSync( Path.join( source, $.name ), { throwIfNoEntry: true } ).isFile();
+
+        if ( File ) {
+            try {
+                FS.copyFileSync( Path.join( source, $.name ),
+                    Path.join( target, $.name ),
+                    FS.constants.COPYFILE_FICLONE );
+
+                ( debug ) && console.debug( "[Debug]" + ":", {
+                    Source: Path.join( source, $.name ), Target: Path.join( target, $.name )
+                } );
+            } catch ( error ) {
+                // ...
+            }
+        } else {
+            if ( Directory ) {
+                Copy( Path.join( source, $.name ), Path.join( target, $.name ) );
+            }
+        }
+    } );
+}
+
 /***
  * Module Entry-Point Command
  * ==========================
@@ -57,6 +102,10 @@ const Command = async ($: Argv) => {
             ($?.debug) && console.debug( "Current Directory" + ":", Process.cwd(), "\n" );
 
             Process.chdir( Path.join( Process.cwd(), "distribution" ) );
+
+//            await Subprocess("git clone --single-branch --no-tags --dissociate https://github.com/cloud-hybrid/cloud-factory.git", Process.cwd(), false);
+//
+//            Copy(Path.join(Process.cwd(), "cloud-factory"), Process.cwd(), false);
 
             const Binaries = FS.readdirSync( Path.join( Process.cwd(), "node_modules", ".bin" ), { withFileTypes: true } )
                 .map( ($) => Path.join( Process.cwd(), "node_modules", ".bin", $.name ) );
