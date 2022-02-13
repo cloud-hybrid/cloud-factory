@@ -1,0 +1,9 @@
+{
+    "tf": "True",
+    "cfn": "False",
+    "cloud": "AWS",
+    "creator": "Jacob B. Sanders",
+    "service": "test",
+    "environment": "Development",
+    "organization": "Cloud-Technology"
+}

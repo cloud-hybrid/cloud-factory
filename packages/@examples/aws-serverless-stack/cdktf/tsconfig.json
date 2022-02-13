@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "checkJs": true,
+        "allowJs": true,
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "inlineSourceMap": false,
+        "inlineSources": true,
+        "lib": ["ESNext"],
+        "module": "CommonJS",
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "stripInternal": false,
+        "target": "ES2018"
+    },
+    "include": ["**/*.ts", "**/*.json"],
+    "exclude": ["node_modules"]
+}

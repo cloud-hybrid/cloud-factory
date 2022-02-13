@@ -1,0 +1,11 @@
+{
+    "name": "poc",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "aws-xray-sdk-core": "^3.3.4",
+        "aws-sdk": "^2.1072.0",
+        "utils": "capstone-global/utils_lambda_layer#WIP/2.x"
+    },
+    "main": "index.js"
+}

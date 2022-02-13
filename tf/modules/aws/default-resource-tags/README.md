@@ -140,8 +140,8 @@ performed in order:
 
 1. `brew install terraform-docs` - Install Documentation Dependency
 2. `terraform init` - Initialize Terraform Local Requirements
-3. `eval "${PWD}/ci-cd/tfvars"` - Generate the `terraform.tfvars` & `terraform.tfvars.json` Files
-4. `eval "${PWD}/ci-cd/inject"` - Inject `README.md` via Configuration Settings + `*.md` Files
+3. `eval "${PWD}/configuration/ci-cd/tfvars"` - Generate the `terraform.tfvars` & `terraform.tfvars.json` Files
+4. `eval "${PWD}/configuration/ci-cd/inject"` - Inject `README.md` via Configuration Settings + `*.md` Files
 
 Lastly, Commit & Push to VCS.
 

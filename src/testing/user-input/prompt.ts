@@ -24,7 +24,7 @@ const questions = [
     List
 ];
 
-Question.prompt( questions ).then( (answers) => {
+Question.prompt( questions ).then( async (answers) => {
     console.log( JSON.stringify( answers, null, 4 ) );
 } );
 

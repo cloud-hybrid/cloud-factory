@@ -132,7 +132,7 @@ class Constructor implements Input {
     private readonly compilation: Validate<{ [Symbol.iterator](): Iterator<readonly [ (string | number | symbol), Property ]> }>;
 
     constructor(name: string, schema: File | JSON | {}, debug: boolean = Constructor.Debug) {
-        const $: typeof Constructor.Reference = (Constructor.serializable(schema) && !FS.existsSync(String(schema) ?? true)) ? schema: Import( String( schema ) );
+        const $: typeof Constructor.Reference = (Constructor.serializable(schema) && !FS.existsSync(String(schema))) ? schema: Import( String( schema ) );
 
         this.target = schema;
 

@@ -1,7 +1,5 @@
 import $ from "inquirer";
 
-import Process from "process";
-
 const characters = (value: any) => {
     if ( !valid( value ) ) {
         return "[Warning] Input Value Required (String)";
@@ -35,9 +33,6 @@ const valid = (value: any) => {
 };
 
 const message = (value: string) => {
-    Process.stdout.clearScreenDown();
-    Process.stdout.clearLine( 0 );
-
     return value;
 }
 
@@ -56,6 +51,7 @@ type Asynchronous = (input: string | number | any) => Promise<boolean>;
 class Abstract {
     name: string;
     message: string;
+
     validate?: Asynchronous;
 
     private readonly default: Function;

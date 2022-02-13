@@ -51,3 +51,8 @@ src/**/*.d.ts
 .terraform.tfstate.backup.*
 
 tf/**/.terraform.lock.hcl
+
+.gitlab-id
+.gitlab-token
+.gitlab-url
+.gitlab-username

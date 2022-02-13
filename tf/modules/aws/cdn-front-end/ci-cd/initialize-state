@@ -1,0 +1,92 @@
+#!/bin/bash --posix
+
+# -*-  Coding: UTF-8  -*- #
+# -*-  System: Linux  -*- #
+# -*-  Usage:   *.*   -*- #
+
+set -eo pipefail
+
+[[ ${@} =~ "--debug" || ${@} =~ "--Debug" ]] && set -x
+
+export GWD="$(git rev-parse --show-toplevel)"
+
+export IAC="${GWD}/tf/modules/aws/cdn-front-end/iac"
+
+export CWD="${GWD}/tf/modules/aws/cdn-front-end/ci-cd"
+
+Directory () {
+    cd "${IAC}" && export PWD="$(pwd)"
+}
+
+Prompt () {
+    if [[ -f "${CWD}/.gitlab-id" ]]; then
+        export ID="$(cat "${CWD}/.gitlab-id")"
+    else
+        printf "%s" "Project-ID: "
+        export ID="$(read _ID; printf "%s" "${_ID}")"
+        echo "${ID}" > "${CWD}/.gitlab-id";
+    fi
+
+    if [[ -f "${CWD}/.gitlab-username" ]]; then
+        export USERNAME="$(cat "${CWD}/.gitlab-username")"
+    else
+        printf "%s" "Username: "
+        export USERNAME="$(read _USERNAME; printf "%s" "${_USERNAME}")"
+        echo "${USERNAME}" > "${CWD}/.gitlab-username";
+    fi
+
+    if [[ -f "${CWD}/.gitlab-token" ]]; then
+        export TOKEN="$(cat "${CWD}/.gitlab-token")"
+    else
+        printf "%s" "Gitlab API Token: "
+        export TOKEN="$(read _TOKEN; printf "%s" "${_TOKEN}")"
+        echo "${TOKEN}" > "${CWD}/.gitlab-token";
+    fi
+
+    if [[ -f "${CWD}/.gitlab-url" ]]; then
+        export VCS="$(cat "${CWD}/.gitlab-url")"
+    else
+        printf "%s" "Gitlab Hostname: "
+        export VCS="$(read _VCS; printf "%s" "${_VCS:-"${VCS}"}")"
+        echo "${VCS}" > "${CWD}/.gitlab-url"
+    fi
+
+    return ${?}
+}
+
+State () {
+    for STATE in "Production" "Editorial" "Staging" "QA" "Development"; do
+        declare URI="https://${USERNAME}:${TOKEN}@${VCS}/api/v4/projects/${ID}/terraform/state/${STATE}"
+
+        terraform init \
+            -backend-config="address=${URI}" \
+            -backend-config="lock_address=${URI}/lock" \
+            -backend-config="unlock_address=${URI}/lock" \
+            -backend-config="username=${USERNAME}" \
+            -backend-config="password=${TOKEN}" \
+            -backend-config="lock_method=POST" \
+            -backend-config="unlock_method=DELETE" \
+            -backend-config="retry_wait_min=5" 2>/dev/null || \
+        terraform init -migrate-state \
+            -backend-config="address=${URI}" \
+            -backend-config="lock_address=${URI}/lock" \
+            -backend-config="unlock_address=${URI}/lock" \
+            -backend-config="username=${USERNAME}" \
+            -backend-config="password=${TOKEN}" \
+            -backend-config="lock_method=POST" \
+            -backend-config="unlock_method=DELETE" \
+            -backend-config="retry_wait_min=5" 2>/dev/null || \
+        { \
+            printf "%s\n%s\n%s\n" "Terraform State Needs Reconfiguration." \
+                "Please Copy & Paste the Following URL to Terraform when Prompted: " \
+                "   - ${URI}" ;\
+            terraform init -reconfigure
+        }
+    done
+
+    return ${?}
+}
+
+Exit () { return ${?} ; }
+
+Directory && Prompt && State && Exit

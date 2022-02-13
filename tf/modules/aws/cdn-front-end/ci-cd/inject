@@ -1,0 +1,21 @@
+#!/bin/bash --norc
+
+# -*-  Coding: UTF-8  -*- #
+# -*-  System: Linux  -*- #
+# -*-  Usage:   *.*   -*- #
+
+set -eo pipefail
+
+[[ ${@} =~ "--debug" || ${@} =~ "--Debug" ]] && set -x
+
+export CWD="${PWD}"
+export GWD="$(git rev-parse --show-toplevel)"
+
+terraform-docs markdown table "${GWD}/configuration/iac" --output-file "${GWD}/configuration/README.md" \
+    --output-mode inject \
+        --config "${CWD}/configuration/ci-cd/documentation.yaml" \
+            --recursive-path "${GWD}/configuration/state"
+
+[[ "${?}" == "0" ]] && echo "Injected Configuration Documentation"
+
+exit ${?}

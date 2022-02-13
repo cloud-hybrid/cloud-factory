@@ -3,69 +3,57 @@
         "checkJs": true,
         "allowJs": true,
         "alwaysStrict": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "emitBOM": false,
-        "incremental": true,
         "sourceMap": true,
-        "listFilesOnly": false,
-        "listEmittedFiles": true,
-        "listFiles": false,
         "inlineSourceMap": false,
-        "noEmitOnError": true,
-        "noFallthroughCasesInSwitch": true,
-        "declaration": true,
-        "emitDeclarationOnly": false,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noUnusedLocals": false,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "declarationMap": true,
-        "strictFunctionTypes": true,
-        "allowSyntheticDefaultImports": true,
-        "noErrorTruncation": true,
-        "preserveSymlinks": true,
-        "esModuleInterop": true,
-        "exactOptionalPropertyTypes": false,
-        "forceConsistentCasingInFileNames": true,
+        "inlineSources": false,
         "lib": [
-            "ES2021",
             "ESNext",
             "DOM"
         ],
         "module": "ESNext",
-        "moduleResolution": "Node",
-        "preserveConstEnums": true,
-        "pretty": true,
-        "removeComments": false,
-        "skipLibCheck": true,
-        "strict": true,
-        "target": "ESNext",
-        "composite": true,
-        "diagnostics": true,
-        "importHelpers": false,
-        "isolatedModules": true,
-        "disableSizeLimit": true,
-        "extendedDiagnostics": true,
-        "downlevelIteration": false,
-        "useDefineForClassFields": true,
-        "assumeChangesOnlyAffectDirectDependencies": false,
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": false,
         "allowUnreachableCode": true,
-        "strictNullChecks": true,
-        "disableReferencedProjectLoad": true,
-        "disableSolutionSearching": true,
-        "disableSourceOfProjectReferenceRedirect": false
+        "noUnusedParameters": true,
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
+        "exactOptionalPropertyTypes": false,
+        "forceConsistentCasingInFileNames": true,
+        "stripInternal": false,
+        "target": "ESNext"
     },
-    "exclude": [
-        "**/*.map",
-        "**/*.d.ts",
-        "**/*.js"
-    ],
-    "include": [
-        "**/*.ts",
-        "**/*.json",
-        "index.js"
-    ]
+    "ts-node": {
+        "swc": false,
+        "transpileOnly": false,
+
+        "require": ["tsconfig-paths/register"],
+
+        "files": true,
+        "preferTsExts": true,
+        "experimentalReplAwait": true,
+        "experimentalResolverFeatures": true,
+        /***
+            Override certain paths to be compiled and executed as CommonJS or ECMAScript modules. When overridden,
+            the tsconfig "module" and package.json "type" fields are overridden. This is useful because TypeScript
+            files cannot use the .cjs nor .mjs file extensions; it achieves the same effect. Each key is a glob
+            pattern following the same rules as tsconfig's "include" array. When multiple patterns match the same
+            file, the last pattern takes precedence. `cjs` overrides matches files to compile and execute as CommonJS.
+
+            `esm` overrides matches files to compile and execute as native ECMAScript modules. `package` overrides
+            either of the above to default behavior, which obeys package.json "type" and tsconfig.json "module" options.
+        */
+        "module": "module"
+    },
+    "exclude": ["node_modules", "packages", "tf"],
+    "include": ["./src/**/*.ts", "./resources/**/*.ts", "**/*.json", "index.ts", "listener.ts"],
 }

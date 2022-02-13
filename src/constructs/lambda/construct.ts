@@ -20,7 +20,7 @@ import Lambda from "./function.js";
 
 import IAM from "./iam.js";
 
-import * as AWS from "@internal/aws";
+import * as AWS from "@cdktf/provider-aws";
 
 
 /*** ESM Resolver for *Current-Working-Directory* */
@@ -108,11 +108,11 @@ Assertion.strictEqual( FS.existsSync( Packages ), true );
  */
 
 class Construct extends Lambda {
-    name: string;
+    declare name: string;
 
-    description: string;
+    declare description: string;
 
-    uri: string;
+    declare uri: string;
 
     api: AWS.apigatewayv2.Apigatewayv2Api;
 

@@ -54,13 +54,12 @@ const TS = {
 
 const CDKTF = {
     "language": "typescript",
-    "app": "node --es-module-specifier-resolution node ./src/constructs",
+    "app": "node --es-module-specifier-resolution node .",
     "projectId": "8f9df91a-2ed3-4636-942f-dcbaadb53a9b",
     "terraformProviders": [
         "aws",
         "archive"
     ],
-    "codeMakerOutput": "@types",
     "output": "distribution",
     "terraformModules": [],
     "context": {
@@ -73,7 +72,7 @@ const Package = {
     "name": "@cloud-factory/deployable",
     "private": true,
     "version": "0.0.0",
-    "main": "Main.js",
+    "main": "index.js",
     "type": "module",
     "scripts": {
         "get": "cdktf get",
@@ -88,16 +87,17 @@ const Package = {
         "node": ">=16"
     },
     "dependencies": {
-        "cdktf": "^0.9",
-        "cdktf-cli": "^0.9",
-        "constructs": "^10.0.31",
+        "cdktf": "latest",
+        "cdktf-cli": "latest",
+        "constructs": "latest",
 
-        "@cdktf/provider-aws": "^3.0.1",
+        "@cdktf/provider-aws": "latest",
 
         "ajv": "^8.8.2",
         "ajv-formats": "^3.0.0-rc.0",
 
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "dotenv": "latest"
     },
     "devDependencies": {
         "@types/node": "^17.0.8",
@@ -133,48 +133,6 @@ function Configuration(Arguments: Argv) {
 
     Arguments.option( "debug", { type: "boolean" } ).alias( "debug", "d" ).default( "debug", false );
     Arguments.describe( "debug", "Enable Debug Logging" );
-}
-
-/***
- * Recursive Copy Function
- * -----------------------
- * *Note* - this will perform *actual, real copies*; symbolic links are resolved to their raw pointer location(s).
- *
- * These are important considerations especially when building for reproducible distributions.
- *
- * @param source {string} Original Source Path
- * @param target {string} Target Copy Destination
- *
- * @param debug {boolean}
- * @constructor
- *
- */
-
-function Copy(source: string, target: string, debug: boolean = false) {
-    FS.mkdirSync( target, { recursive: true } );
-    FS.readdirSync( source,
-        { withFileTypes: true } ).filter( ($) => (!Exclusions.includes( $.name )) ).forEach( ($) => {
-        const Directory = FS.lstatSync( Path.join( source, $.name ), { throwIfNoEntry: true } ).isDirectory();
-        const File = FS.lstatSync( Path.join( source, $.name ), { throwIfNoEntry: true } ).isFile();
-
-        if ( File ) {
-            try {
-                FS.copyFileSync( Path.join( source, $.name ),
-                    Path.join( target, $.name ),
-                    FS.constants.COPYFILE_FICLONE );
-
-                (debug) && console.debug( "[Debug]" + ":", {
-                    Source: Path.join( source, $.name ), Target: Path.join( target, $.name )
-                }, "\n" );
-            } catch ( error ) {
-                // ...
-            }
-        } else {
-            if ( Directory ) {
-                Copy( Path.join( source, $.name ), Path.join( target, $.name ) );
-            }
-        }
-    } );
 }
 
 /***
@@ -254,14 +212,10 @@ const Command = async ($: Argv) => {
             await Remove( Path.join( Process.cwd(), "package-lock.json" ), { force: true } );
             await Remove( Path.join( Process.cwd(), "cdktf.json" ), { force: true } );
 
-            const Target = Path.join( OS.userInfo( { encoding: "utf-8" } ).homedir, ".factory", UUID.v4() );
+            FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
+            FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
 
-            console.debug( "[Debug] Cloud-Factory Output Target" + ":", Target, "\n" );
-
-             FS.writeFileSync( Path.join( Process.cwd(), "package.json" ), JSON.stringify( Package, null, 4 ) );
-             FS.writeFileSync( Path.join( Process.cwd(), "cdktf.json" ), JSON.stringify( CDKTF, null, 4 ) );
-
-            await Subprocess( "npm install --silent", Path.join( Process.cwd() ) );
+            await Subprocess( "npm install .", Process.cwd(), true);
 
             console.debug( "[Debug] Local Callable Directory" + ":", FS.existsSync( Path.join( Process.cwd(), "node_modules", ".bin" ) ) + "\n" );
 
@@ -282,7 +236,7 @@ const Command = async ($: Argv) => {
 
             Assertion.notEqual( Content, null, "Fatal Error - Stack Content(s) Read Exception: nil" );
 
-            FS.writeFileSync( Path.join( Process.cwd(), "Stack.js" ), Content ?? "" );
+            FS.writeFileSync( Path.join( Process.cwd(), "index.js" ), Content ?? "" );
             FS.writeFileSync( Path.join( Process.cwd(), "tsconfig.json" ), JSON.stringify( TS, null, 4 ) );
 
             await Subprocess( Binaries[CDK] + " " + "synth", Path.join( Process.cwd() ) );

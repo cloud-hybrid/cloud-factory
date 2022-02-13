@@ -1,16 +1,11 @@
 {
     "language": "typescript",
-    "app": "node --es-module-specifier-resolution node ./src/constructs",
-    "projectId": "8f9df91a-2ed3-4636-942f-dcbaadb53a9b",
-    "terraformProviders": [
-        "aws",
-        "archive"
-    ],
-    "codeMakerOutput": "@types",
-    "output": "distribution",
+    "app": "node --es-module-specifier-resolution node ./resources/constructs/ssm-parameter",
     "terraformModules": [],
+    "terraformProviders": [],
+    "output": "distribution",
     "context": {
-        "excludeStackIdFromLogicalIds": "true",
-        "allowSepCharsInLogicalIds": "true"
+        "allowSepCharsInLogicalIds": "true",
+        "excludeStackIdFromLogicalIds": "true"
     }
 }

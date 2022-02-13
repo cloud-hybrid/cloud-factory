@@ -1,0 +1,22 @@
+{
+    "title": "sts-assume-role.policy",
+    "description": "IAM STS Lambda Assume Role Policy",
+    "type": "object",
+    "required": [
+        "Version", "Statement"
+    ],
+    "properties": {
+        "Version": {"type": "string"},
+        "Statement": {
+            "type": "array",
+            "items": {
+                "properties": {
+                    "Action": {"type": "string"},
+                    "Effect": {"type": "string"},
+                    "Principal": {"type": "object", "properties": {"Service": {"type": "string"}}},
+                    "Sid": {"type": "string"}
+                }
+            }
+        }
+    }
+}

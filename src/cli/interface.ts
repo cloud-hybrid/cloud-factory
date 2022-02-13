@@ -1,54 +1,55 @@
-import Chalk from "chalk";
-import Process from "process";
-import Colors from "../utilities/colors.js";
+import Chalk    from "chalk";
+import Process  from "process";
 
-import TTY, { Columns } from "../utilities/tty.js";
-import { CLI, Argv } from "./arguments.js";
-import { Header } from "./header.js";
-
-const Template = await import("../commands/template-engine/index.js");
-const API = await import("../commands/api/index.js");
+type Argument = import("yargs").Argv;
 
 const Main = async () => {
-    (TTY) && Process.stdout.write( Header + "\n" );
-
     const script = "cloud-factory";
+
+    const { Colors } = await import("../utilities/colors.js").then( ( $ ) => $ );
+
+    const { CLI } = await import("./arguments.js");
+    const { Header } = await import("./header.js").then( ( $ ) => $ );
+    const Template = await import("../commands/template-engine/index.js");
+    const API = await import("../commands/api/index.js");
+    
     const Arguments = async () => {
+        ( await import("../utilities/tty.js").then( ( $ ) => $.TTY ) ) && Process.stdout.write( Header + "\n" );
         const Commands = {
-            cwd: async (input: Argv) => (await import("../commands/environment/cwd.js")).CWD( input ),
-            environment: async (input: Argv) => (await import("../commands/environment/configuration.js")).NPM(
+            cwd: async ( input: Argument ) => ( await import("../commands/environment/cwd.js") ).CWD( input ),
+            environment: async ( input: Argument ) => ( await import("../commands/environment/configuration.js") ).NPM(
                 input ),
-            input: async (input: Argv) => (await import("../commands/prompt")).JSON( input ),
-            git: async (input: Argv) => (await import("../commands/git-template")).Git( input ),
-            version: (await import("../commands/version.js")).Version,
+            input: async ( input: Argument ) => ( await import("../commands/prompt") ).JSON( input ),
+            git: async ( input: Argument ) => ( await import("../commands/git-template") ).Git( input ),
+            version: ( await import("../commands/version.js") ).Version,
             factory: {
-                deploy: async (input: Argv) => (await import("../commands/factory/deploy.js")).Deploy( input ),
-                synthesize: async (input: Argv) => (await import("../commands/factory/synthesize.js")).Synthesize( input ),
-                initialize: async (input: Argv) => (await import("../commands/factory/initialize.js")).Initialize( input ),
-                "build-layer": async (input: Argv) => (await import("../commands/factory/build-layer.js")).Layer( input )
+                deploy: async ( input: Argument ) => ( await import("../commands/factory/deploy.js") ).Deploy( input ),
+                synthesize: async ( input: Argument ) => ( await import("../commands/factory/synthesize.js") ).Synthesize( input ),
+                initialize: async ( input: Argument ) => ( await import("../commands/factory/initialize.js") ).Initialize( input ),
+                "build-layer": async ( input: Argument ) => ( await import("../commands/factory/build-layer.js") ).Layer( input )
             },
             case: {
-                "train-case": async (input: Argv) => (await import("../commands/string/train-case.js")).Train( input ),
-                "screaming-train-case": async (input: Argv) => (await import("../commands/string/screaming-train-case.js")).Scream( input )
+                "train-case": async ( input: Argument ) => ( await import("../commands/string/train-case.js") ).Train( input ),
+                "screaming-train-case": async ( input: Argument ) => ( await import("../commands/string/screaming-train-case.js") ).Scream( input )
             },
             template: {
-                "hydrate": async (input: Argv) => await Template.Render( input )
+                "hydrate": async ( input: Argument ) => await Template.Render( input )
             },
             secrets: {
-                "get-secret": async (input: Argv) => await API.Get( input ),
-                "create-secret": async (input: Argv) => await API.Create( input )
+                "get-secret": async ( input: Argument ) => await API.Get( input ),
+                "create-secret": async ( input: Argument ) => await API.Create( input )
             }
         };
 
         /*** CLI Arguments, Options, and Sub-Command Inclusions */
         return await CLI( Process.argv.splice( 2 ) )
-            .scriptName( script ).wrap( Columns() )
+            .scriptName( script ).wrap( await import("../utilities/tty.js").then( ( $ ) => $.Columns() ) )
 
-            .command( "generate-auto-completion", Colors( "Blue", "Generate a CLI Options Auto-Completion Script" ), (async ($: Argv) => {
+            .command( "generate-auto-completion", Colors( "Blue", "Generate a CLI Options Auto-Completion Script" ), ( async ( $: Argument ) => {
                 $.showCompletionScript();
-            }) )
+            } ) )
 
-            .command( "template", Colors( "Blue", "Hydrate JSON Template(s) via Regular Expression(s) Engine" ), (async ($: Argv) => {
+            .command( "template", Colors( "Blue", "Hydrate JSON Template(s) via Regular Expression(s) Engine" ), ( async ( $: Argument ) => {
                 const name = "template";
                 const commands = [
                     "hydrate"
@@ -64,15 +65,15 @@ const Main = async () => {
                 $.example( "Fill Template (Prompt)", name + " " + commands[0] + " " + "? [--help] ? [--Flag(s)]" );
 
                 $.command( commands[0], "Hydrate Template File", (
-                    async ($: Argv) => {
+                    async ( $: Argument ) => {
                         $.option( "file", { type: "string" } ).alias( "file", "f" ).describe( "file", Colors( "Bright-White", "Template File Path (Required, Prompt)" ) ).default( "file", null );
                         $.option( "output", { type: "string" } ).alias( "output", "o" ).describe( "output", Colors( "Bright-White", "Hydrated Template Output Path (Required, Prompt)" ) ).default( "output", null );
 
                         await Commands.template.hydrate( $ );
-                    }) );
-            }) )
+                    } ) );
+            } ) )
 
-            .command( "secrets-manager", Colors( "Blue", "AWS Secrets Management API" ), (async ($: Argv) => {
+            .command( "secrets-manager", Colors( "Blue", "AWS Secrets Management API" ), ( async ( $: Argument ) => {
                 const name = "secrets-manager";
                 const commands = [
                     "get",
@@ -91,7 +92,7 @@ const Main = async () => {
                 $.example( "Create Secret (Prompt)", script + " " + name + " " + commands[1] + " " + "? [--help] ? [--Flag(s)]" );
 
                 $.command( commands[0], "Retrieve AWS Secret", (
-                    async ($: Argv) => {
+                    async ( $: Argument ) => {
                         /*** Namespace'd Example(s) */
                         $.example( "API Response (Prompt)", script + " " + name + " " + commands[0] );
                         $.example( "Print Secret (Prompt)", script + " " + name + " " + commands[0] + " " + "--value-only" );
@@ -102,11 +103,11 @@ const Main = async () => {
                         $.option( "value-only", { type: "boolean" } ).alias( "value-only", "x" ).describe( "value-only", Colors( "Bright-White", "Retrieve Only the Secret-Value - No API Response" ) ).default( "value-only", false );
 
                         await Commands.secrets["get-secret"]( $ );
-                    })
+                    } )
                 );
 
                 $.command( commands[1], "Create AWS Secret", (
-                    async ($: Argv) => {
+                    async ( $: Argument ) => {
                         /*** Namespace'd Example(s) */
                         $.example( "Create Secret",
                             script + " " + name + " " + commands[1] + " " + "--name \"IBM/Production/Audit-Service/Storage/Watson-AI/Credentials\" --description \"IBM Watson Storage Login Credentials\" --secret \"input.json\"" );
@@ -117,69 +118,69 @@ const Main = async () => {
                         $.option( "secret", { type: "string" } ).alias( "secret", "f" ).describe( "secret", Colors( "Bright-White", "JSON File-System Path Containing Secret's Content" ) ).default( "secret", null );
 
                         await Commands.secrets["create-secret"]( $ );
-                    })
+                    } )
                 );
-            }) )
+            } ) )
 
             /*** String Manipulation */
             .command( "string", Colors( "Blue", "String Regular-Expression Function(s)" ), (
-                async ($: Argv) => {
+                async ( $: Argument ) => {
                     $.command( "train-case", "Train-Case String Manipulation", (
-                        async ($: Argv) => await Commands.case["train-case"]( $ ))
+                        async ( $: Argument ) => await Commands.case["train-case"]( $ ) )
                     );
 
                     $.command( "screaming-train-case", "Screaming-Train-Case String Manipulation", (
-                        async ($: Argv) => await Commands.case["screaming-train-case"]( $ ))
+                        async ( $: Argument ) => await Commands.case["screaming-train-case"]( $ ) )
                     );
-                })
+                } )
             )
 
             /*** Runtime Environment */
             .command( "environment", Colors( "Blue", "Runtime Environment Information" ), (
-                async ($: Argv) => {
+                async ( $: Argument ) => {
 
                     /*** NPM Configuration */
                     $.command( "npm-configuration", "NPM Runtime Environment Variable(s) & Configuration", (
-                        async ($: Argv) => await Commands.environment( $ ))
+                        async ( $: Argument ) => await Commands.environment( $ ) )
                     );
 
                     /*** Current Working Directory */
                     $.command( "cwd", "Current Working Directory", (
-                        async ($: Argv) => await Commands.cwd( $ ))
+                        async ( $: Argument ) => await Commands.cwd( $ ) )
                     );
-                }) )
+                } ) )
 
             /*** JSON-Input */
             .command( "json-input", Colors( "Red", "JSON User-Input" ), (
-                async ($: Argv) => {
+                async ( $: Argument ) => {
                     return await Commands.input( $ );
-                }) )
+                } ) )
 
             /*** Test-Input */
             .command( "git", Colors( "Red", "Git Templating" ), (
-                async ($: Argv) => {
+                async ( $: Argument ) => {
                     return await Commands.git( $ );
-                }) )
+                } ) )
 
             /*** CDFK Configuration */
             .command( "ci-cd", Colors( "Yellow", "(Under Development) CI-CD Utilities" ), (
-                async ($: Argv) => {
+                async ( $: Argument ) => {
                     $.command( "build-layer", "Build a Lambda Layer", (
-                        async ($: Argv) => await Commands.factory["build-layer"]( $ ))
+                        async ( $: Argument ) => await Commands.factory["build-layer"]( $ ) )
                     );
 
                     $.command( "initialize", "Create Distribution", (
-                        async ($: Argv) => await Commands.factory.initialize( $ ))
+                        async ( $: Argument ) => await Commands.factory.initialize( $ ) )
                     );
 
                     $.command( "synthesize", "Stack Synthesis", (
-                        async ($: Argv) => await Commands.factory.synthesize( $ ))
+                        async ( $: Argument ) => await Commands.factory.synthesize( $ ) )
                     );
 
                     $.command( "deploy", "Deploy Cloud Resource(s)", (
-                        async ($: Argv) => await Commands.factory.deploy( $ ))
+                        async ( $: Argument ) => await Commands.factory.deploy( $ ) )
                     );
-                })
+                } )
             )
 
             /*** Version - Hide unless Explicitly Invoked*/
@@ -194,12 +195,22 @@ const Main = async () => {
             /*** Global Debug Optional */
             .option( "debug", { type: "boolean" } ).alias( "debug", "d" ).default( "debug", false ).describe( "debug", Colors( "Green", "Enable Verbose Logging - Primarily for Development Purposes" ) )
 
+            /*** Catch Anything not Found */
+            .command({
+                command: "*",
+                handler: () => {
+                    /// console.error("Invalid Command");
+
+                    process.exit(1);
+                },
+            })
+
             .parseAsync();
     };
 
-    const Input = await Arguments();
+    return await Arguments();
 };
 
 export { Main };
 
-export default Main;
+export default {};

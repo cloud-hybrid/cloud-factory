@@ -1,4 +1,4 @@
-import * as Archive from "@internal/archive";
+import * as Archive from "@cdktf/provider-archive";
 
 const { DataArchiveFile } = Archive;
 

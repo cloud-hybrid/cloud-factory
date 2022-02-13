@@ -32,4 +32,4 @@ const Header = Generate();
 
 export { Header };
 
-export default Header;
+export default {};

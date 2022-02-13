@@ -196,12 +196,12 @@ class Parameter implements Options {
                     : 4;
     }
 
-    protected exists() {
-
+    protected exists(): null {
+        return null;
     }
 
-    private arn() {
-
+    protected arn(): null {
+        return null;
     }
 }
 

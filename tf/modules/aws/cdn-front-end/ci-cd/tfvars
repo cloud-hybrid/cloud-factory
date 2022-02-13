@@ -1,0 +1,18 @@
+#!/bin/bash --norc
+
+# -*-  Coding: UTF-8  -*- #
+# -*-  System: Linux  -*- #
+# -*-  Usage:   *.*   -*- #
+
+set -eo pipefail
+
+[[ ${@} =~ "--debug" || ${@} =~ "--Debug" ]] && set -x
+
+export GWD="$(git rev-parse --show-toplevel)"
+
+terraform-docs tfvars json "${GWD}/configuration/iac" > "${GWD}/configuration/iac/terraform.tfvars.json"
+terraform-docs tfvars hcl "${GWD}/configuration/iac" > "${GWD}/configuration/iac/terraform.tfvars.hcl"
+
+[[ "${?}" == "0" ]] && echo "Generated Input-Variable Files"
+
+exit ${?}

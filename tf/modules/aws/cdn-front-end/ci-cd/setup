@@ -1,0 +1,19 @@
+#!/bin/bash --norc
+
+# -*-  Coding: UTF-8  -*- #
+# -*-  System: Linux  -*- #
+# -*-  Usage:   *.*   -*- #
+
+set -eo pipefail
+
+[[ ${@} =~ "--debug" || ${@} =~ "--Debug" ]] && set -x
+
+export GWD="$(git rev-parse --show-toplevel)"
+
+eval "${GWD}/configuration/ci-cd/initialize-state"
+eval "${GWD}/configuration/ci-cd/tfvars"
+eval "${GWD}/configuration/ci-cd/inject"
+
+[[ ${?} == 0 ]] && echo "Initialization Complete"
+
+exit ${?}

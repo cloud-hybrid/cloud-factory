@@ -7,23 +7,23 @@
  * @copyright   Cloud-Technology LLC. & Affiliates
  */
 
-import { S3Bucket } from "@internal/aws/s3/s3-bucket.js";
-import { S3BucketObject } from "@internal/aws/s3/s3-bucket-object.js";
-import { Apigatewayv2Api } from "@internal/aws/apigatewayv2/apigatewayv2-api.js";
-import { Apigatewayv2Stage } from "@internal/aws/apigatewayv2/apigatewayv2-stage.js";
-import { Apigatewayv2Integration } from "@internal/aws/apigatewayv2/apigatewayv2-integration.js";
-import { Apigatewayv2Route } from "@internal/aws/apigatewayv2/apigatewayv2-route.js";
-import { CloudwatchLogStream} from "@internal/aws/cloudwatch/cloudwatch-log-stream.js"
-import { CloudwatchLogGroup } from "@internal/aws/cloudwatch/cloudwatch-log-group.js";
-import { IamPolicy } from "@internal/aws/iam/iam-policy.js";
-import { IamRolePolicyAttachment } from "@internal/aws/iam/iam-role-policy-attachment.js";
-import { IamRole } from "@internal/aws/iam/iam-role.js";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3/s3-bucket.js";
+import { S3BucketObject } from "@cdktf/provider-aws/lib/s3/s3-bucket-object.js";
+import { Apigatewayv2Api } from "@cdktf/provider-aws/lib/apigatewayv2/apigatewayv2-api.js";
+import { Apigatewayv2Stage } from "@cdktf/provider-aws/lib/apigatewayv2/apigatewayv2-stage.js";
+import { Apigatewayv2Integration } from "@cdktf/provider-aws/lib/apigatewayv2/apigatewayv2-integration.js";
+import { Apigatewayv2Route } from "@cdktf/provider-aws/lib/apigatewayv2/apigatewayv2-route.js";
+import { CloudwatchLogStream} from "@cdktf/provider-aws/lib/cloudwatch/cloudwatch-log-stream.js"
+import { CloudwatchLogGroup } from "@cdktf/provider-aws/lib/cloudwatch/cloudwatch-log-group.js";
+import { IamPolicy } from "@cdktf/provider-aws/lib/iam/iam-policy.js";
+import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam/iam-role-policy-attachment.js";
+import { IamRole } from "@cdktf/provider-aws/lib/iam/iam-role.js";
 
-import { LambdaFunction } from "@internal/aws/lambdafunction/lambda-function.js";
-import { LambdaPermission } from "@internal/aws/lambdafunction/lambda-permission.js";
-import { LambdaLayerVersion } from "@internal/aws/lambdafunction/lambda-layer-version.js";
+import { LambdaFunction } from "@cdktf/provider-aws/lib/lambdafunction/lambda-function.js";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambdafunction/lambda-permission.js";
+import { LambdaLayerVersion } from "@cdktf/provider-aws/lib/lambdafunction/lambda-layer-version.js";
 
-import { AwsProvider } from "@internal/aws/aws-provider.js";
+import { AwsProvider } from "@cdktf/provider-aws/lib/aws-provider.js";
 
 import Assertion from "assert";
 
@@ -38,6 +38,10 @@ import * as UUID from "uuid";
 
 /*** ESM Compatability & JSON Importer */
 const Import: NodeRequire = Module.createRequire( import.meta.url );
+
+new Apigatewayv2Api({
+
+})
 
 /// import { Configuration, Distribution, Import, Settings } from "./settings.js";
 

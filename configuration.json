@@ -1,0 +1,10 @@
+{
+    "tf": "True",
+    "cfn": "False",
+    "cloud": "AWS",
+    "creator": "Jacob Sanders",
+    "service": "test",
+    "environment": "Development",
+    "organization": "Cloud-Technology",
+    "vcs": {"id": 0, "type": "Gitlab", "repository": "https://git-vcs.server.io/repository.git"}
+}

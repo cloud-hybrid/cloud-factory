@@ -1,0 +1,94 @@
+'Functions.azure_post_retrieve_metadata_by_isbn' (Succeeded, Id=bb47fd5c-9bee-4a21-853b-0d51a19f8b5f, Duration=15856ms)
+2022-02-10T17:15:30Z   [Error]   RequestError: Timeout: Request failed to complete in 15000ms
+2022-02-10T17:15:30Z   [Information]       at Request.userCallback (/home/site/wwwroot/node_modules/mssql/lib/tedious/request.js:812:19)
+2022-02-10T17:15:30Z   [Information]       at Request.callback (/home/site/wwwroot/node_modules/tedious/lib/request.js:205:14)
+2022-02-10T17:15:30Z   [Information]       at Parser.<anonymous> (/home/site/wwwroot/node_modules/tedious/lib/connection.js:3114:26)
+2022-02-10T17:15:30Z   [Information]       at Object.onceWrapper (events.js:519:28)
+2022-02-10T17:15:30Z   [Information]       at Parser.emit (events.js:400:28)
+2022-02-10T17:15:45Z   [Information]   Executed 'Functions.azure_post_retrieve_metadata_by_isbn' (Succeeded, Id=9a75bb1c-e826-48ca-b17a-6e4d1ddc32b1, Duration=15126ms)
+2022-02-10T17:15:45Z   [Error]   RequestError: Timeout: Request failed to complete in 15000ms
+2022-02-10T17:15:45Z   [Information]       at Request.userCallback (/home/site/wwwroot/node_modules/mssql/lib/tedious/request.js:812:19)
+2022-02-10T17:15:45Z   [Information]       at Request.callback (/home/site/wwwroot/node_modules/tedious/lib/request.js:205:14)
+2022-02-10T17:15:45Z   [Information]       at Parser.<anonymous> (/home/site/wwwroot/node_modules/tedious/lib/connection.js:3114:26)
+2022-02-10T17:15:45Z   [Information]       at Object.onceWrapper (events.js:519:28)
+2022-02-10T17:15:45Z   [Information]       at Parser.emit (events.js:400:28)
+2022-02-10T17:15:45Z   [Information]       at Readable.<anonymous> (/home/site/wwwroot/node_modules/tedious/lib/token/token-stream-parser.js:34:12)
+2022-02-10T17:16:01Z   [Information]   Executed 'Functions.azure_post_retrieve_metadata_by_isbn' (Succeeded, Id=8589a0fb-9023-4b30-ac4f-e1645b6d2c9b, Duration=15039ms)
+2022-02-10T17:16:01Z   [Error]   RequestError: Timeout: Request failed to complete in 15000ms
+2022-02-10T17:16:01Z   [Information]       at Request.userCallback (/home/site/wwwroot/node_modules/mssql/lib/tedious/request.js:812:19)
+2022-02-10T17:16:01Z   [Information]       at Request.callback (/home/site/wwwroot/node_modules/tedious/lib/request.js:205:14)
+2022-02-10T17:16:01Z   [Information]       at Parser.<anonymous> (/home/site/wwwroot/node_modules/tedious/lib/connection.js:3114:26)
+2022-02-10T17:16:01Z   [Information]       at Object.onceWrapper (events.js:519:28)
+2022-02-10T17:16:01Z   [Information]       at Parser.emit (events.js:400:28)
+2022-02-10T17:16:12Z   [Information]   Host Status: {
+  "id": "capstone-production-biblio-funct",
+  "state": "Running",
+  "version": "4.1.3.3",
+  "versionDetails": "4.1.3+3ed9ce8ebeef5b156badaf203a016a56e819a852",
+  "platformVersion": "96.0.10.637",
+  "instanceId": "77fee32440e9061dfe6537dabb6df219da60ec2c2376309508fab39db606b397",
+  "computerName": "pl0sdlwk00010U",
+  "processUptime": 252931766,
+  "functionAppContentEditingState": "Unknown",
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "2.8.3"
+  }
+}
+2022-02-10T17:16:12Z   [Information]   Host Status: {
+  "id": "capstone-production-biblio-funct",
+  "state": "Running",
+  "version": "4.1.3.3",
+  "versionDetails": "4.1.3+3ed9ce8ebeef5b156badaf203a016a56e819a852",
+  "platformVersion": "96.0.10.637",
+  "instanceId": "77fee32440e9061dfe6537dabb6df219da60ec2c2376309508fab39db606b397",
+  "computerName": "pl0sdlwk00010U",
+  "processUptime": 252932164,
+  "functionAppContentEditingState": "Unknown",
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "2.8.3"
+  }
+}
+2022-02-10T17:16:16Z   [Verbose]   Request successfully matched the route with name 'health' and template 'api/health'
+2022-02-10T17:16:16Z   [Information]   Executing 'Functions.health' (Reason='This function was programmatically called via the host APIs.', Id=01897559-72cf-4063-86cc-73ab097cd598)
+2022-02-10T17:16:16Z   [Verbose]   Sending invocation id:01897559-72cf-4063-86cc-73ab097cd598
+2022-02-10T17:16:16Z   [Verbose]   Posting invocation id:01897559-72cf-4063-86cc-73ab097cd598 on workerId:7fa79725-0ad6-469f-af99-678f9c25c982
+2022-02-10T17:16:16Z   [Information]   [Debug] Request {
+    "method": "GET",
+    "url": "http://169.254.129.3/api/health",
+    "originalUrl": "http://169.254.129.3/api/health",
+    "headers": {
+        "host": "169.254.129.3",
+        "user-agent": "HealthCheck/1.0"
+    },
+    "query": {},
+    "params": {}
+}
+2022-02-10T17:16:16Z   [Information]   [Debug] Database Configuration {
+    "URI": {
+        "user": "SuperAdminUser",
+        "password": "$uper@dmin",
+        "database": "ProductMaster",
+        "server": "ccimktsql3p.coughlancompanies.com",
+        "port": 55001,
+        "pool": {
+            "max": 10,
+            "min": 1,
+            "idleTimeoutMillis": 30000
+        },
+        "options": {
+            "encrypt": false
+        }
+    }
+}
+
+
+---
+
+[11:19 AM] Tom Zemlin
+Response Err:  {  method: 'POST',  uri: 'https://capstone-production-biblio-functions-api-application.azurewebsites.net/api/metadata',  headers: {    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDQ1MTMzMTQsImV4cCI6MTY0NDUxMzkxNH0.Gie37V1C1D1eB5mAOdJEKsyssUM92A4yVWz6rl63uBs'  },  body: { isbns: [ '9781476512242' ] }}
+
+[11:20 AM] Tom Zemlin
+Response Err:  {  method: 'POST',  uri: 'https://capstone-production-biblio-functions-api-application.azurewebsites.net/api/metadata',  headers: {    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDQ1MTMzMTQsImV4cCI6MTY0NDUxMzkxNH0.Gie37V1C1D1eB5mAOdJEKsyssUM92A4yVWz6rl63uBs'  },  body: { isbns: [ '9781476512242' ] }}{  Message: 'Uncaught Error',  Error: '{"code":"ETIMEOUT","originalError":{"message":"Timeout: Request failed to complete in 15000ms","code":"ETIMEOUT"},"name":"RequestError","number":"ETIMEOUT","precedingErrors":[]}',  Help: 'N/A'}
+

@@ -1,0 +1,26 @@
+{
+    "name": "cdktf",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "type": "commonjs",
+    "types": "index.ts",
+    "private": true,
+    "scripts": {
+        "get": "cdktf get",
+        "build": "tsc",
+        "start": "tsc --watch",
+        "synth": "cdktf synth",
+        "compile": "tsc --pretty",
+        "upgrade": "npm i cdktf@latest cdktf-cli@latest",
+        "upgrade:next": "npm i cdktf@next cdktf-cli@next"
+    },
+    "dependencies": {
+        "cdktf": "0.9.0",
+        "constructs": "latest"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "latest",
+        "@types/node": "latest",
+        "typescript": "latest"
+    }
+}

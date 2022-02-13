@@ -1,4 +1,4 @@
-import * as AWS from "@internal/aws";
+import * as AWS from "@cdktf/provider-aws";
 
 const { cloudwatch, iam, lambdafunction, s3 } = AWS;
 
