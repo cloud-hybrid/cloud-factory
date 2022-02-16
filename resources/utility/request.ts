@@ -22,44 +22,52 @@ import URI from "url";
 
 import HTTPs from "https";
 
-const GET = (uri: string, headers = {}, resolve: Function, reject: Function) => {
-    const $: { body: string[], data: string } = { body: [], data: "" };
+/*** Example Backend Module */
+
+/***
+ *
+ * @param {string} uri
+ * @param {{}} headers
+ * @param {Function} resolve
+ * @param {Function} reject
+ *
+ * @constructor
+ *
+ */
+
+const GET = ( uri: string, headers = {}, resolve: Function, reject: Function ) => {
+    const $: { body: Buffer | string | null, data: string } = { body: "", data: "" };
 
     const options = URI.urlToHttpOptions( new URL( uri ) );
 
     options.headers = { ... options.headers, ... headers };
 
-    HTTPs.get( options, (response) => {
+    HTTPs.get( options, ( response ) => {
+        /// HTTP Redirect(s)
         if ( response.statusCode === 301 || response.statusCode === 302 ) {
             return GET( response.headers.location as string, headers, resolve, reject );
         }
 
-        response.on("error", (error) => {
-            reject(error);
-        });
+        response.on( "error", ( error ) => {
+            reject( error );
+        } );
 
-        response.on( "data", (chunk) => {
-            $.body.push( chunk );
+        response.on( "data", ( chunk ) => {
+            $.body += Buffer.from( chunk ).toString( "utf-8" );
         } );
 
         response.on( "end", () => {
-            try {
-                $.data = JSON.parse( $.body.join() );
-            } catch ( e ) {
-                $.data = JSON.parse( "" );
-            } finally {
-                resolve( $ );
-            }
+            resolve( JSON.parse( String( $.body ) ) );
         } );
     } );
 };
 
-const POST = (uri: string, data: string, headers = {}, resolve: Function, reject: Function) => {
+const POST = ( uri: string, data: string, headers = {}, resolve: Function, reject: Function ) => {
     const $: { body: string[], data: string } = { body: [], data: "" };
 
     const options = {
         ... {
-            protocol: "https:",
+            protocol: "https" + ":",
             port: 443,
             rejectUnauthorized: false,
             requestCert: true,
@@ -75,12 +83,12 @@ const POST = (uri: string, data: string, headers = {}, resolve: Function, reject
         }, ... URI.urlToHttpOptions( new URL( uri ) )
     };
 
-    const request = HTTPs.request( options, (response) => {
+    const request = HTTPs.request( options, ( response ) => {
         if ( response.statusCode === 301 || response.statusCode === 302 ) {
             return POST( response.headers.location as string, data, headers, resolve, reject );
         }
 
-        response.on( "data", (chunk) => {
+        response.on( "data", ( chunk ) => {
             $.body?.push( Buffer.from( chunk ).toString( "utf-8" ) );
         } );
 
@@ -88,14 +96,14 @@ const POST = (uri: string, data: string, headers = {}, resolve: Function, reject
             try {
                 $.data = JSON.parse( $.body.join() );
             } catch ( e ) {
-                console.warn("[Warning] Unable to Parse Body");
+                console.warn( "[Warning] Unable to Parse Body" );
             }
         } );
     } );
 
-    request.on("error", (error) => {
-        reject(error);
-    });
+    request.on( "error", ( error ) => {
+        reject( error );
+    } );
 
     request.on( "close", () => {
         resolve( $ );
@@ -106,7 +114,35 @@ const POST = (uri: string, data: string, headers = {}, resolve: Function, reject
     request.end();
 };
 
-const get = async (url: string, headers: any) => new Promise( (resolve, reject) => GET( url, headers, resolve, reject ) );
-const post = async (url: string, data: any, headers: any) => new Promise( (resolve, reject) => POST( url, data, headers, resolve, reject ) );
+/***
+ * @param {string} url
+ * @param {Headers} headers
+ *
+ * @returns {Promise<{body: string[], data: string}>}
+ */
+
+const get = ( url: string, headers: Headers ): Promise<{ body: string[], data: string }> => {
+    return new Promise( ( resolve, reject ) => {
+        GET( url, headers, resolve, reject );
+    } );
+};
+
+/***
+ * @param {string} url
+ * @param {string} data
+ * @param {Headers} headers
+ *
+ * @returns {Promise<{body: string[], data: string}>}
+ */
+
+const post = ( url: string, data: string, headers: Headers ): Promise<{ body: string[], data: string }> => {
+    return new Promise( ( resolve, reject ) => {
+        POST( url, data, headers, resolve, reject );
+    } );
+};
+
+type Headers = { [$: string]: string };
 
 export default { get, post };
+
+export type { Headers };

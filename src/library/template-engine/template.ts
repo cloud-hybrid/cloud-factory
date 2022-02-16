@@ -8,7 +8,6 @@ import ANSI from "./../../utilities/ansi/index.js";
 import Chalk from "chalk";
 
 /***
- *
  * Content-Buffer Template Handler
  *
  * - Read input as buffer or string, search for utf-8 encoded, or

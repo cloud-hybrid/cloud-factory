@@ -39,9 +39,9 @@ import * as UUID from "uuid";
 /*** ESM Compatability & JSON Importer */
 const Import: NodeRequire = Module.createRequire( import.meta.url );
 
-new Apigatewayv2Api({
-
-})
+//new Apigatewayv2Api({
+//
+//})
 
 /// import { Configuration, Distribution, Import, Settings } from "./settings.js";
 

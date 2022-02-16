@@ -32,7 +32,6 @@ function Configuration(Arguments: Argv) {
 
 /***
  * Module Entry-Point Command
- * ==========================
  *
  * @param $ {Argv} Commandline Arguments
  *
